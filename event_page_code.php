@@ -83,18 +83,13 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         $photo_query = "
             SELECT 
-                nuot.nuotraukos_pavadinimas,
-                nuot.nuotraukos_duomenys AS failas
+                nuot.nuotraukos_kelias
             FROM RENGINYS ren
             LEFT JOIN RENGINIU_NUOTRAUKOS nuot ON ren.id = nuot.fk_renginio_id
             WHERE nuot.fk_renginio_id = ?
         ";
 
         $photo_stmt = $dbc->prepare($photo_query);
-        if (!$photo_stmt) {
-            die("Photos query preparation failed: " . mysqli_error($dbc));
-        }
-
         $photo_stmt->bind_param("i", $event_id);
         $photo_stmt->execute();
         $photo_result = $photo_stmt->get_result();
@@ -102,10 +97,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         if ($photo_result->num_rows > 0) {
             echo "<h3>Nuotraukos renginio</h3><div class='photo-gallery'>";
             while ($photo_row = $photo_result->fetch_assoc()) {
-                $base64_image = base64_encode($photo_row['failas']);
-                $image_src = "data:image/jpeg;base64," . $base64_image;
+                $image_src = htmlspecialchars($photo_row['nuotraukos_kelias']);
                 
-                echo "<img src='" . htmlspecialchars($image_src) . "' alt='" . htmlspecialchars($photo_row['nuotraukos_pavadinimas']) . "' style='max-width: 150px; height: auto;'>";
+                echo "<img src='" . htmlspecialchars($photo_row['nuotraukos_kelias']) . "' style='max-width: 300px; height: auto;'>";
             }
             echo "</div>";
         } else {
