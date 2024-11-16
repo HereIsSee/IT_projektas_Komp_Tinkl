@@ -26,40 +26,6 @@ $social_groups = [];
 while ($row = mysqli_fetch_assoc($social_groups_result)) {
     $social_groups[] = $row;
 }
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Insert into VARTOTOJO_PASIRINKIMAI
-    $user_id = $_SESSION['user_id'];
-    $location_id = $_POST['location_id'];
-
-    $insert_user_choice = "INSERT INTO VARTOTOJO_PASIRINKIMAI (fk_vartotojo_id, fk_vieta_id) VALUES (?, ?)";
-    $stmt = $dbc->prepare($insert_user_choice);
-    $stmt->bind_param("ii", $user_id, $location_id);
-    $stmt->execute();
-    $user_choice_id = $stmt->insert_id; // Get the inserted id to use for related tables
-
-    // Insert selected event types into VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI
-    if (!empty($_POST['event_types'])) {
-        $insert_event_type_choice = "INSERT INTO VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_renginio_tipo_id) VALUES (?, ?)";
-        $stmt = $dbc->prepare($insert_event_type_choice);
-        foreach ($_POST['event_types'] as $event_type_id) {
-            $stmt->bind_param("ii", $user_choice_id, $event_type_id);
-            $stmt->execute();
-        }
-    }
-
-    // Insert selected social groups into VARTOTOJO_GRUPES_PASIRINKIMAI
-    if (!empty($_POST['social_groups'])) {
-        $insert_group_choice = "INSERT INTO VARTOTOJO_GRUPES_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_socialines_grupes_id) VALUES (?, ?)";
-        $stmt = $dbc->prepare($insert_group_choice);
-        foreach ($_POST['social_groups'] as $group_id) {
-            $stmt->bind_param("ii", $user_choice_id, $group_id);
-            $stmt->execute();
-        }
-    }
-
-    echo "<p class='alert alert-success'>Prenumėrata sukurta sėkmingai!</p>";
-}
 ?>
 
 <!DOCTYPE html>
@@ -91,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container-fluid">
+        
         <div class="row content">
             <div class="col-sm-3 sidenav hidden-xs">
                 <h2>Logo</h2>
@@ -108,6 +75,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             
             <div class="col-sm-9 main-content">
+            <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Insert into VARTOTOJO_PASIRINKIMAI
+                $user_id = $_SESSION['user_id'];
+                $location_id = $_POST['location_id'];
+            
+                $insert_user_choice = "INSERT INTO VARTOTOJO_PASIRINKIMAI (fk_vartotojo_id, fk_vieta_id) VALUES (?, ?)";
+                $stmt = $dbc->prepare($insert_user_choice);
+                $stmt->bind_param("ii", $user_id, $location_id);
+                $stmt->execute();
+                $user_choice_id = $stmt->insert_id; // Get the inserted id to use for related tables
+            
+                // Insert selected event types into VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI
+                if (!empty($_POST['event_types'])) {
+                    $insert_event_type_choice = "INSERT INTO VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_renginio_tipo_id) VALUES (?, ?)";
+                    $stmt = $dbc->prepare($insert_event_type_choice);
+                    foreach ($_POST['event_types'] as $event_type_id) {
+                        $stmt->bind_param("ii", $user_choice_id, $event_type_id);
+                        $stmt->execute();
+                    }
+                }
+            
+                // Insert selected social groups into VARTOTOJO_GRUPES_PASIRINKIMAI
+                if (!empty($_POST['social_groups'])) {
+                    $insert_group_choice = "INSERT INTO VARTOTOJO_GRUPES_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_socialines_grupes_id) VALUES (?, ?)";
+                    $stmt = $dbc->prepare($insert_group_choice);
+                    foreach ($_POST['social_groups'] as $group_id) {
+                        $stmt->bind_param("ii", $user_choice_id, $group_id);
+                        $stmt->execute();
+                    }
+                }
+            
+                echo "<p class='alert alert-success'>Prenumėrata sukurta sėkmingai!</p>";
+            }
+            ?>
                 <h2>Sukurti naują prenumeratą</h2>
                 
                 <form action="create_subscription.php" method="post" class="form">

@@ -30,40 +30,6 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
     $event_types[] = $row;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = mysqli_real_escape_string($dbc, $_POST['title']);
-    $date = mysqli_real_escape_string($dbc, $_POST['date']);
-    $description = mysqli_real_escape_string($dbc, $_POST['description']);
-    $event_type_id = mysqli_real_escape_string($dbc, $_POST['event_type']);
-    $location_id = mysqli_real_escape_string($dbc, $_POST['location_id']);
-    $user_id = $_SESSION['user_id']; // Assuming the user's ID is stored in session
-    
-    // Insert new event into the database
-    $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_vieta_id) 
-              VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt = $dbc->prepare($query);
-    $stmt->bind_param("sssiii", $title, $date, $description, $event_type_id, $user_id, $location_id);
-    
-    if ($stmt->execute()) {
-        // Get the ID of the newly created event
-        $event_id = mysqli_insert_id($dbc);
-
-        echo "<p class='alert alert-success'>Renginiys sukurtas sėkmingai!!</p>";
-        
-        // Insert selected social groups into RENGINIAI_GRUPES table
-        if (!empty($_POST['social_groups'])) {
-            $insert_group_choice = "INSERT INTO RENGINIAI_GRUPES (fk_renginio_id, fk_socialines_grupes_id) VALUES (?, ?)";
-            $stmt = $dbc->prepare($insert_group_choice);
-            foreach ($_POST['social_groups'] as $group_id) {
-                $stmt->bind_param("ii", $event_id, $group_id);
-                $stmt->execute();
-            }
-        }
-        
-    } else {
-        echo "<p class='alert alert-danger'>Klaida kuriant renginį: " . $dbc->error . "</p>";
-    }
-}
 ?>
 
 
@@ -115,6 +81,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <!-- Main content area with event creation form -->
             <div class="col-sm-9 main-content">
+
+                <?php
+                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                        $title = mysqli_real_escape_string($dbc, $_POST['title']);
+                        $date = mysqli_real_escape_string($dbc, $_POST['date']);
+                        $description = mysqli_real_escape_string($dbc, $_POST['description']);
+                        $event_type_id = mysqli_real_escape_string($dbc, $_POST['event_type']);
+                        $location_id = mysqli_real_escape_string($dbc, $_POST['location_id']);
+                        $user_id = $_SESSION['user_id']; // Assuming the user's ID is stored in session
+                        
+                        // Insert new event into the database
+                        $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_vieta_id) 
+                                  VALUES (?, ?, ?, ?, ?, ?)";
+                        $stmt = $dbc->prepare($query);
+                        $stmt->bind_param("sssiii", $title, $date, $description, $event_type_id, $user_id, $location_id);
+                        
+                        if ($stmt->execute()) {
+                            // Get the ID of the newly created event
+                            $event_id = mysqli_insert_id($dbc);
+                    
+                            echo "<p class='alert alert-success'>Renginiys sukurtas sėkmingai!!</p>";
+                            
+                            // Insert selected social groups into RENGINIAI_GRUPES table
+                            if (!empty($_POST['social_groups'])) {
+                                $insert_group_choice = "INSERT INTO RENGINIAI_GRUPES (fk_renginio_id, fk_socialines_grupes_id) VALUES (?, ?)";
+                                $stmt = $dbc->prepare($insert_group_choice);
+                                foreach ($_POST['social_groups'] as $group_id) {
+                                    $stmt->bind_param("ii", $event_id, $group_id);
+                                    $stmt->execute();
+                                }
+                            }
+                            
+                        } else {
+                            echo "<p class='alert alert-danger'>Klaida kuriant renginį: " . $dbc->error . "</p>";
+                        }
+                    }
+                ?>
                 <h2>Sukurti naują renginį</h2>
                 
                 <form action="create_event.php" method="post" class="form">
