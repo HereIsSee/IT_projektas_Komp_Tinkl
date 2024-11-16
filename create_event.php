@@ -73,7 +73,7 @@ include 'fetch_event_types.php';
                         $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, adresas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_miesto_id, fk_mikrorajono_id) 
                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                         $stmt = $dbc->prepare($query);
-                        $stmt->bind_param("sssiiiii", $title, $date, $description, $address, $event_type_id, $user_id, $city_id, $microcity_id);
+                        $stmt->bind_param("ssssiiii", $title, $date, $description, $address, $event_type_id, $user_id, $city_id, $microcity_id);
 
                         
                         if ($stmt->execute()) {

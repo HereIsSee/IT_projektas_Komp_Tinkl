@@ -15,14 +15,14 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             reng.adresas,
             rt.pavadinimas AS event_type,
             m.miestas,
-            mik.pavadinimas,
+            mik.pavadinimas AS mikrorajonas,
             reng.adresas,
             reng.fk_seno_renginio_id
         FROM 
             RENGINYS reng
         LEFT JOIN 
             RENGINIO_TIPAS rt ON reng.fk_renginio_tipas_id = rt.id
-        LEFT JOIN 
+        LEFT JOIN
             MIESTAS m ON reng.fk_miesto_id = m.id
         LEFT JOIN 
             MIKRORAJONAS mik ON reng.fk_mikrorajono_id = mik.id
