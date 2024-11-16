@@ -103,8 +103,7 @@ CREATE TABLE RENGINIAI_GRUPES
 CREATE TABLE RENGINIU_NUOTRAUKOS
 (
 	id int AUTO_INCREMENT,
-	nuotraukos_pavadinimas varchar (255) NOT NULL,
-	nuotraukos_duomenys BLOB NOT NULL,
+	nuotraukos_kelias varchar (255) NOT NULL,
 	fk_renginio_id int NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(fk_renginio_id) REFERENCES RENGINYS (id)

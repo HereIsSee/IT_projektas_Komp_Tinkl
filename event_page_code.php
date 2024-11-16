@@ -81,9 +81,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             echo "<p class='no-content'>Nėra grupių.</p>";
         }
 
-        // Fetch photos of the event
         $photo_query = "
-            SELECT nuot.nuotraukos_failas AS failas 
+            SELECT 
+                nuot.nuotraukos_pavadinimas,
+                nuot.nuotraukos_duomenys AS failas
             FROM RENGINYS ren
             LEFT JOIN RENGINIU_NUOTRAUKOS nuot ON ren.id = nuot.fk_renginio_id
             WHERE nuot.fk_renginio_id = ?
@@ -101,14 +102,16 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         if ($photo_result->num_rows > 0) {
             echo "<h3>Nuotraukos renginio</h3><div class='photo-gallery'>";
             while ($photo_row = $photo_result->fetch_assoc()) {
-                echo "<img src='" . htmlspecialchars($photo_row['failas']) . "' alt='Event photo' style='max-width: 150px; height: auto;'>";
+                $base64_image = base64_encode($photo_row['failas']);
+                $image_src = "data:image/jpeg;base64," . $base64_image;
+                
+                echo "<img src='" . htmlspecialchars($image_src) . "' alt='" . htmlspecialchars($photo_row['nuotraukos_pavadinimas']) . "' style='max-width: 150px; height: auto;'>";
             }
             echo "</div>";
         } else {
             echo "<p class='no-content'>Nuotraukų apie renginį nerasta.</p>";
         }
 
-        // Fetch previous event link if available
         if (!empty($row['fk_seno_renginio_id'])) {
             $previous_event_id = $row['fk_seno_renginio_id'];
             $previous_query = "SELECT pavadinimas FROM RENGINYS WHERE id = ?";

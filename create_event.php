@@ -75,7 +75,6 @@ include 'fetch_event_types.php';
                         $stmt = $dbc->prepare($query);
                         $stmt->bind_param("ssssiiii", $title, $date, $description, $address, $event_type_id, $user_id, $city_id, $microcity_id);
 
-                        
                         if ($stmt->execute()) {
                             $event_id = mysqli_insert_id($dbc);
                     
@@ -89,15 +88,44 @@ include 'fetch_event_types.php';
                                     $stmt->execute();
                                 }
                             }
-                            
-                        } else {
-                            echo "<p class='alert alert-danger'>Klaida kuriant renginį: " . $dbc->error . "</p>";
+
+                            if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+                                
+                                $targetDir = "assets/images/" . $user_id . "/";
+                                if (!file_exists($targetDir)) {
+                                    mkdir($targetDir, 0777, true);
+                                }
+
+                                
+                                $stmt = $dbc->prepare("INSERT INTO RENGINIU_NUOTRAUKOS (nuotraukos_kelias, fk_renginio_id) VALUES (?, ?)");
+                                $stmt->bind_param("si", $imagePath, $event_id);
+                                $uploadedImages = $_FILES['images'];
+                                foreach ($uploadedImages['name'] as $key => $value) {
+                                    $fileName = basename($uploadedImages['name'][$key]);
+                                    $targetFilePath = $targetDir . $fileName;
+                                    if (file_exists($targetFilePath)) {
+                                        echo "<h1>Sorry, file already exists<h/1>";
+                                    } else {
+                                        if (move_uploaded_file($uploadedImages["tmp_name"][$key], $targetFilePath)) {
+                                            $imagePath = $targetFilePath;
+                                            $stmt->execute();
+                                            echo "The file " . $fileName . " has been uploaded successfully.<br>";
+                                        } else {
+                                            echo "Sorry, there was an error uploading your file.<br>";
+                                        }
+                                    }
+                                }
+                                $stmt->close();
+                                
+                            }else {
+                                echo "No files were uploaded.<br>";
+                            }
                         }
                     }
                 ?>
                 <h2>Sukurti naują renginį</h2>
                 
-                <form action="create_event.php" method="post" class="form">
+                <form action="create_event.php" method="post" class="form" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="title">Renginio pavadinimas:</label>
                         <input type="text" class="form-control" id="title" name="title" required>
@@ -158,6 +186,11 @@ include 'fetch_event_types.php';
                                 </label>
                             </div>
                         <?php endforeach; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="images">Ikelkite nuotraukas:</label>
+                        <input type="file" class="form-control" id="images" name="images[]" multiple>
                     </div>
                     
 					
