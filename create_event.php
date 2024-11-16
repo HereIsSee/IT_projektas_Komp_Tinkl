@@ -9,27 +9,9 @@ if ($_SESSION['vaidmuo'] === 'vartotojas') {
     exit();
 }
 
-$locations_query = "SELECT * FROM VIETA";
-$locations_result = mysqli_query($dbc, $locations_query);
-$locations = [];
-while ($row = mysqli_fetch_assoc($locations_result)) {
-    $locations[] = $row;
-}
-
-$social_groups_query = "SELECT * FROM SOCIALINES_GRUPES";
-$social_groups_result = mysqli_query($dbc, $social_groups_query);
-$social_groups = [];
-while ($row = mysqli_fetch_assoc($social_groups_result)) {
-    $social_groups[] = $row;
-}
-
-$event_types_query = "SELECT * FROM RENGINIO_TIPAS";
-$event_types_result = mysqli_query($dbc, $event_types_query);
-$event_types = [];
-while ($row = mysqli_fetch_assoc($event_types_result)) {
-    $event_types[] = $row;
-}
-
+include 'fetch_cities.php';
+include 'fetch_social_groups.php';
+include 'fetch_event_types.php';
 ?>
 
 
@@ -41,21 +23,17 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
-        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
         .row.content { height: 100vh; }
         
-        /* Gray background color for sidebar */
         .sidenav {
             background-color: #f1f1f1;
             height: 100%;
         }
-        
-        /* Main content styling */
+        label { display:block }
         .main-content {
             padding: 20px;
         }
 
-        /* Form styling */
         .form-group > label {
             font-weight: bold;
         }
@@ -79,7 +57,6 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
                 </ul><br>
             </div>
             
-            <!-- Main content area with event creation form -->
             <div class="col-sm-9 main-content">
 
                 <?php
@@ -88,22 +65,22 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
                         $date = mysqli_real_escape_string($dbc, $_POST['date']);
                         $description = mysqli_real_escape_string($dbc, $_POST['description']);
                         $event_type_id = mysqli_real_escape_string($dbc, $_POST['event_type']);
-                        $location_id = mysqli_real_escape_string($dbc, $_POST['location_id']);
-                        $user_id = $_SESSION['user_id']; // Assuming the user's ID is stored in session
+                        $address = mysqli_real_escape_string($dbc, $_POST['address']);
+                        $city_id = mysqli_real_escape_string($dbc, $_POST['city_id']);
+                        $microcity_id = mysqli_real_escape_string($dbc, $_POST['microcity_id']);
+                        $user_id = $_SESSION['user_id'];
                         
-                        // Insert new event into the database
-                        $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_vieta_id) 
-                                  VALUES (?, ?, ?, ?, ?, ?)";
+                        $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, adresas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_miesto_id, fk_mikrorajono_id) 
+                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                         $stmt = $dbc->prepare($query);
-                        $stmt->bind_param("sssiii", $title, $date, $description, $event_type_id, $user_id, $location_id);
+                        $stmt->bind_param("sssiiiii", $title, $date, $description, $address, $event_type_id, $user_id, $city_id, $microcity_id);
+
                         
                         if ($stmt->execute()) {
-                            // Get the ID of the newly created event
                             $event_id = mysqli_insert_id($dbc);
                     
                             echo "<p id='success-message'class='alert alert-success'>Renginiys sukurtas sėkmingai!!</p>";
                             
-                            // Insert selected social groups into RENGINIAI_GRUPES table
                             if (!empty($_POST['social_groups'])) {
                                 $insert_group_choice = "INSERT INTO RENGINIAI_GRUPES (fk_renginio_id, fk_socialines_grupes_id) VALUES (?, ?)";
                                 $stmt = $dbc->prepare($insert_group_choice);
@@ -147,19 +124,28 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
 						</select>
                     </div>
                     
+
                     <div class="form-group">
-                        <label for="location_id">Renginio vieta:</label>
+                        <h2>Renginio vieta</h2>
+                        <label for="city_id">Renginio miestas:</label>
 						
-                        <select class="form-control" id="location_id" name="location_id" required>
-							<?php foreach ($locations as $location): ?>
-								<option value="<?= $location['id'] ?>">
-									Miestas: <?= htmlspecialchars($location['miestas']) ?>
-									<?php if (!empty($location['mikrorajonas'])): ?>
-										- Mikrorajonas: <?= htmlspecialchars($location['mikrorajonas']) ?>
-									<?php endif; ?>
+                        <select class="form-control" id="city_id" name="city_id" required>
+                            <option value="default">--Pasirinkite miestą--</option>
+							<?php foreach ($cities as $city): ?>
+								<option value="<?= $city['id'] ?>">
+									<?= htmlspecialchars($city['miestas']) ?>
 								</option>
 							<?php endforeach; ?>
 						</select>
+						
+                        <label for="microcity_id">Renginio mikrorajonas</label>
+
+                        <select class="form-control" id="microcity_id" name="microcity_id" required>
+                            
+                        </select>
+
+                        <label for="address">Renginio adresas: </label>
+                        <input type="text" id="address" name="address">
                     </div>
 					
 					<div class="form-group">
@@ -180,6 +166,8 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
             </div>
         </div>
     </div>
-    <script src="success_message.js"></script>
+    <script src="success_message_fade_out.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="microcity_dropdown.js"></script>
 </body>
 </html>

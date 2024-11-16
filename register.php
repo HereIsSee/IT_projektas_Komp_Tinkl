@@ -35,13 +35,26 @@ include('database_connection.php');
 				$slaptazodis = password_hash($_POST['slaptazodis'], PASSWORD_DEFAULT);
 				$role = mysqli_real_escape_string($dbc, $_POST['role']);
 
-				// Insert the new user into the database
-				$sql = "INSERT INTO VARTOTOJAS (vardas, el_pastas, slaptazodis, vaidmuo) VALUES ('$vardas', '$el_pastas', '$slaptazodis', '$role')";
-				if (mysqli_query($dbc, $sql)) {
-					echo "<h2>Sėkminga registracija!</h2>";
-				} else {
-					echo "<h2>Error: " . mysqli_error($dbc) . "</h2>";
-				}
+				$check_query = "SELECT * FROM VARTOTOJAS WHERE vardas = ? OR el_pastas = ?";
+                $stmt = $dbc->prepare($check_query);
+                $stmt->bind_param("ss", $vardas, $el_pastas);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if($result->num_rows > 0) {
+                    echo "<h2>Error: Username or email already exists.</h2>";
+                } else{
+                    $sql = "INSERT INTO VARTOTOJAS (vardas, el_pastas, slaptazodis, vaidmuo) VALUES (?, ?, ?, ?)";
+                    $stmt = $dbc->prepare($sql);
+                    $stmt->bind_param("ssss", $vardas, $el_pastas, $slaptazodis, $role);
+                    
+                    if ($stmt->execute()) {
+                        echo "<h2>Sėkminga registracija!</h2>";
+                    } else {
+                        echo "<h2>Error: " . $dbc->error . "</h2>";
+                    }
+                }
+				
 			}
 			?>
             <form action="register.php" method="post">

@@ -35,7 +35,7 @@ CREATE TABLE VARTOTOJAS
 	el_pastas varchar (255) NOT NULL,
 	slaptazodis varchar (255) NOT NULL,
 	vaidmuo char (11),
-	CHECK(vaidmuo in ('-vip', '-admin', '-vartotojas')),
+	CHECK(vaidmuo in ('vip', 'admin', 'vartotojas')),
 	PRIMARY KEY(id),
 	UNIQUE (vardas),
 	UNIQUE (el_pastas)

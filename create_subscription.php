@@ -3,29 +3,9 @@ include 'database_connection.php';
 mysqli_set_charset($dbc, "utf8");
 include 'is_user.php';
 
-
-$locations_query = "SELECT * FROM VIETA";
-$locations_result = mysqli_query($dbc, $locations_query);
-$locations = [];
-while ($row = mysqli_fetch_assoc($locations_result)) {
-    $locations[] = $row;
-}
-
-
-$event_types_query = "SELECT * FROM RENGINIO_TIPAS";
-$event_types_result = mysqli_query($dbc, $event_types_query);
-$event_types = [];
-while ($row = mysqli_fetch_assoc($event_types_result)) {
-    $event_types[] = $row;
-}
-
-
-$social_groups_query = "SELECT * FROM SOCIALINES_GRUPES";
-$social_groups_result = mysqli_query($dbc, $social_groups_query);
-$social_groups = [];
-while ($row = mysqli_fetch_assoc($social_groups_result)) {
-    $social_groups[] = $row;
-}
+include 'fetch_cities.php';
+include 'fetch_social_groups.php';
+include 'fetch_event_types.php';
 ?>
 
 <!DOCTYPE html>
@@ -36,16 +16,13 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
-        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
         .row.content { height: 100vh; }
         
-        /* Gray background color for sidebar */
         .sidenav {
             background-color: #f1f1f1;
             height: 100%;
         }
-        
-        /* Main content styling */
+
         .main-content {
             padding: 20px;
         }
@@ -77,17 +54,16 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
             <div class="col-sm-9 main-content">
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Insert into VARTOTOJO_PASIRINKIMAI
                 $user_id = $_SESSION['user_id'];
-                $location_id = $_POST['location_id'];
+                $city_id = $_POST['city_id'];
+                $microcity_id = $_POST['microcity_id'];
             
-                $insert_user_choice = "INSERT INTO VARTOTOJO_PASIRINKIMAI (fk_vartotojo_id, fk_vieta_id) VALUES (?, ?)";
+                $insert_user_choice = "INSERT INTO VARTOTOJO_PASIRINKIMAI (fk_vartotojo_id, fk_miesto_id, fk_mikrorajono_id) VALUES (?, ?, ?)";
                 $stmt = $dbc->prepare($insert_user_choice);
-                $stmt->bind_param("ii", $user_id, $location_id);
+                $stmt->bind_param("iii", $user_id, $city_id, $microcity_id);
                 $stmt->execute();
-                $user_choice_id = $stmt->insert_id; // Get the inserted id to use for related tables
+                $user_choice_id = $stmt->insert_id;
             
-                // Insert selected event types into VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI
                 if (!empty($_POST['event_types'])) {
                     $insert_event_type_choice = "INSERT INTO VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_renginio_tipo_id) VALUES (?, ?)";
                     $stmt = $dbc->prepare($insert_event_type_choice);
@@ -97,7 +73,6 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
                     }
                 }
             
-                // Insert selected social groups into VARTOTOJO_GRUPES_PASIRINKIMAI
                 if (!empty($_POST['social_groups'])) {
                     $insert_group_choice = "INSERT INTO VARTOTOJO_GRUPES_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_socialines_grupes_id) VALUES (?, ?)";
                     $stmt = $dbc->prepare($insert_group_choice);
@@ -114,19 +89,23 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
                 
                 <form action="create_subscription.php" method="post" class="form">
                     <div class="form-group">
-                        <label for="location_id">Renginio vieta:</label>
+                        <h2>Renginio vieta</h2>
+                        <label for="city_id">Renginio miestas:</label>
 						
-                        <select class="form-control" id="location_id" name="location_id" required>
-							<?php foreach ($locations as $location): ?>
-								<option value="<?= $location['id'] ?>">
-									Miestas: <?= htmlspecialchars($location['miestas']) ?>
-									<?php if (!empty($location['mikrorajonas'])): ?>
-										- Mikrorajonas: <?= htmlspecialchars($location['mikrorajonas']) ?>
-									<?php endif; ?>
+                        <select class="form-control" id="city_id" name="city_id" required>
+                            <option value="default">--Pasirinkite miestą--</option>
+							<?php foreach ($cities as $city): ?>
+								<option value="<?= $city['id'] ?>">
+									<?= htmlspecialchars($city['miestas']) ?>
 								</option>
 							<?php endforeach; ?>
 						</select>
 						
+                        <label for="microcity_id">Renginio mikrorajonas</label>
+
+                        <select class="form-control" id="microcity_id" name="microcity_id" required>
+                            
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -158,6 +137,8 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
             </div>
         </div>
     </div>
-    <script src="success_message.js"></script>
+    <script src="success_message_fade_out.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="microcity_dropdown.js"></script>
 </body>
 </html>

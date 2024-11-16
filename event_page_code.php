@@ -6,24 +6,26 @@ include 'is_user.php';
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $event_id = $_GET['id'];
 
-    // Primary event details query
     $query = "
         SELECT 
             reng.id,
             reng.pavadinimas AS event_title,
             reng.renginio_data AS event_date,
             reng.aprasymas AS description,
+            reng.adresas,
             rt.pavadinimas AS event_type,
-            v.miestas,
-            v.mikrorajonas,
-            v.adresas,
+            m.miestas,
+            mik.pavadinimas,
+            reng.adresas,
             reng.fk_seno_renginio_id
         FROM 
             RENGINYS reng
         LEFT JOIN 
             RENGINIO_TIPAS rt ON reng.fk_renginio_tipas_id = rt.id
         LEFT JOIN 
-            VIETA v ON reng.fk_vieta_id = v.id
+            MIESTAS m ON reng.fk_miesto_id = m.id
+        LEFT JOIN 
+            MIKRORAJONAS mik ON reng.fk_mikrorajono_id = mik.id
         WHERE 
             reng.id = ?
     ";

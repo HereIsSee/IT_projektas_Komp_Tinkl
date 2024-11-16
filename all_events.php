@@ -73,8 +73,8 @@ include 'Event.php';
                         foreach ($events as $event) {
                             echo '<div class="event-card">';
                             echo '<h3> <a href="event_page.php?id=' . urlencode($event->id) . '" style="color: inherit; text-decoration: none;">' . htmlspecialchars($event->title) . '</a></h3>';
-                            echo '<p><strong>Date:</strong> ' . htmlspecialchars(date('Y-m-d', strtotime($event->date))) . '</p>';
-                            echo '<p><strong>Description:</strong> ' . htmlspecialchars($event->description) . '</p>';
+                            echo '<p><strong>Data:</strong> ' . htmlspecialchars(date('Y-m-d', strtotime($event->date))) . '</p>';
+                            echo '<p><strong>Aprašymas:</strong> ' . htmlspecialchars($event->description) . '</p>';
                             echo '</div>';
                         }
                     }

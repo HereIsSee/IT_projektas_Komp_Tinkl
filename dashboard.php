@@ -9,14 +9,13 @@ $user_id = $_SESSION['user_id'];
 $query = "
     SELECT 
         vp.id AS selection_id,
-        v.miestas AS location,
-        v.mikrorajonas AS micro_location,
+        m.miestas AS location,
         rt.pavadinimas AS event_type,
         sg.pavadinimas AS social_group
     FROM 
         VARTOTOJO_PASIRINKIMAI vp
     LEFT JOIN 
-        VIETA v ON vp.fk_vieta_id = v.id
+        MIESTAS m ON vp.fk_miesto_id = m.id
     LEFT JOIN 
         VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI vrtp ON vp.id = vrtp.fk_vartotojo_pasirinkimo_id
     LEFT JOIN 

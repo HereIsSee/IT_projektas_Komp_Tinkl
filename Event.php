@@ -31,13 +31,15 @@ class Event {
         while ($row = $result->fetch_assoc()) {
             $events[] = new Event(
                 $row['id'],
-                $row['pavadinimas'],
-                $row['renginio_data'],
-                $row['aprasymas'],
-                $row['fk_renginio_tipas_id'],
-                $row['fk_vip_vartotojo_id'],
-                $row['fk_vieta_id'],
-                $row['fk_seno_renginio_id']
+				$row['pavadinimas'],
+				$row['renginio_data'],
+				$row['aprasymas'],
+                $row['adresas'],
+				$row['fk_renginio_tipas_id'],
+				$row['fk_vip_vartotojo_id'],
+				$row['fk_miesto_id'],
+                $row['fk_mikrorajono_id'],
+				$row['fk_seno_renginio_id']
             );
         }
 
@@ -63,9 +65,11 @@ class Event {
 				$row['pavadinimas'],
 				$row['renginio_data'],
 				$row['aprasymas'],
+                $row['adresas'],
 				$row['fk_renginio_tipas_id'],
 				$row['fk_vip_vartotojo_id'],
-				$row['fk_vieta_id'],
+				$row['fk_miesto_id'],
+                $row['fk_mikrorajono_id'],
 				$row['fk_seno_renginio_id']
 			);
 		}
