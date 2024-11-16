@@ -107,7 +107,7 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
                     }
                 }
             
-                echo "<p class='alert alert-success'>Prenumėrata sukurta sėkmingai!</p>";
+                echo "<p id='success-message' class='alert alert-success'>Prenumėrata sukurta sėkmingai!</p>";
             }
             ?>
                 <h2>Sukurti naują prenumeratą</h2>
@@ -158,5 +158,6 @@ while ($row = mysqli_fetch_assoc($social_groups_result)) {
             </div>
         </div>
     </div>
+    <script src="success_message.js"></script>
 </body>
 </html>

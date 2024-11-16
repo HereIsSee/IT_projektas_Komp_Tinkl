@@ -101,7 +101,7 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
                             // Get the ID of the newly created event
                             $event_id = mysqli_insert_id($dbc);
                     
-                            echo "<p class='alert alert-success'>Renginiys sukurtas sėkmingai!!</p>";
+                            echo "<p id='success-message'class='alert alert-success'>Renginiys sukurtas sėkmingai!!</p>";
                             
                             // Insert selected social groups into RENGINIAI_GRUPES table
                             if (!empty($_POST['social_groups'])) {
@@ -180,5 +180,6 @@ while ($row = mysqli_fetch_assoc($event_types_result)) {
             </div>
         </div>
     </div>
+    <script src="success_message.js"></script>
 </body>
 </html>
