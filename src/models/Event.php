@@ -20,7 +20,7 @@ class Event {
         $this->previous_event_id = $previous_event_id;
     }
 
-    public static function get_events_from_db($dbc, $month, $year) {
+    public static function getEventsFromDB($dbc, $month, $year) {
         $events = [];
         $query = "SELECT * FROM RENGINYS WHERE MONTH(renginio_data) = ? AND YEAR(renginio_data) = ?";
         $stmt = $dbc->prepare($query);
@@ -46,7 +46,7 @@ class Event {
         return $events;
     }
 	
-	public static function get_all_events_from_db($dbc) {
+	public static function getAllEventsFromDB($dbc) {
 		$events = [];
 		$query = "SELECT * FROM RENGINYS";
 		$stmt = $dbc->prepare($query);

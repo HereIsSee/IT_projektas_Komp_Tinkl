@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,40 +10,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="../../IT_darbas/assets/css/sidenavigation.css" rel="stylesheet" type="text/css">
+  <link href="../../IT_darbas/assets/css/darboard_event_boxes.css" rel="stylesheet" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-  <style>
-    .row.content {height: 100vh;}
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-    /* Styling for event selection cards */
-    .event-selection-container {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
-    .event-selection-container h3 {
-      margin-top: 0;
-      color: #333;
-    }
-    .event-details {
-      margin-bottom: 10px;
-    }
-    .event-detail-label {
-      font-weight: bold;
-      color: #555;
-    }
-    /* Ensure layout is responsive */
-    @media screen and (max-width: 767px) {
-      .row.content {height: auto;}
-    }
-  </style>
 </head>
 <body>
 <div class="container-fluid">
