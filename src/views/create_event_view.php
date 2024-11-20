@@ -4,22 +4,10 @@
     <meta charset="utf-8">
     <title>Sukurti renginį</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="../../IT_darbas/assets/css/create_event.css" rel="stylesheet" type="text/css">
-    <link href="../../IT_darbas/assets/css/sidenavigation.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/create_event.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/sidenavigation.css" rel="stylesheet" type="text/css">
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <style>
-        label { display:block }
-
-        .main-content {
-            padding: 20px;
-        }
-
-        .form-group > label {
-            font-weight: bold;
-        }        
-    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -79,7 +67,7 @@
                             
                         </select>
 
-                        <label id="address_id" for="address">Renginio adresas: </label>
+                        <label style="display: block;" id="address_id" for="address">Renginio adresas: </label>
                         <input type="text" id="address" name="address">
                     </div>
 					
@@ -110,7 +98,7 @@
     
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="../../IT_darbas/assets/js/microcity_dropdown.js"></script>
+    <script src="../assets/js/microcity_dropdown.js"></script>
     <script src="../../IT_darbas/assets/js/success_message_fade_out.js"></script>
 </body>
 </html>

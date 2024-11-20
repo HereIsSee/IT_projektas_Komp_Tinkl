@@ -99,13 +99,13 @@ class Event {
     }
 
     public static function uploadImages($dbc, $event_id, $user_id, $files){
-        $targetDir = "assets/images/" . $user_id . "/";
+        $targetDir = "../assets/images/" . $user_id . "/";
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0777, true);
         }
 
         $query = "INSERT INTO RENGINIU_NUOTRAUKOS (nuotraukos_kelias, fk_renginio_id) VALUES (?, ?)";
-        $stmt = $this->dbc->prepare($query);
+        $stmt = $dbc->prepare($query);
 
         foreach ($files['name'] as $key => $file_name) {
             $targetFilePath = $targetDir . basename($file_name);

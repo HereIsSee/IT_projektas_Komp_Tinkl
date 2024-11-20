@@ -28,7 +28,7 @@ class EventController {
                 'user_id' => $_SESSION['user_id']
             ];
 
-            $event_id = Event::createEvent($data);
+            $event_id = Event::createEvent($this->dbc, $data);
 
             if (!empty($_POST['social_groups'])) {
                 Event::addSocialGroups($this->dbc, $event_id, $_POST['social_groups']);
@@ -47,8 +47,8 @@ class EventController {
     public function getCreateEventData() {
         return [
             'cities' => DatabaseHelper::fetchAll($this->dbc, 'MIESTAS'),
-            'social_groups' => DatabaseHelper::fetchAll($this->dbc, 'RENGINIO_TIPAS'),
-            'event_types' => DatabaseHelper::fetchAll($this->dbc, 'SOCIALINES_GRUPES')
+            'social_groups' => DatabaseHelper::fetchAll($this->dbc, 'SOCIALINES_GRUPES'),
+            'event_types' => DatabaseHelper::fetchAll($this->dbc, 'RENGINIO_TIPAS')
         ];
     }
 
