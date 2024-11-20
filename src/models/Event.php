@@ -116,5 +116,85 @@ class Event {
         }
     }
 
+    public static function fetchEventDetails($dbc, $event_id) {
+        $query = "
+            SELECT 
+                reng.id,
+                reng.pavadinimas AS event_title,
+                reng.renginio_data AS event_date,
+                reng.aprasymas AS description,
+                reng.adresas,
+                rt.pavadinimas AS event_type,
+                m.miestas,
+                mik.pavadinimas AS mikrorajonas,
+                reng.adresas,
+                reng.fk_seno_renginio_id
+            FROM 
+                RENGINYS reng
+            LEFT JOIN 
+                RENGINIO_TIPAS rt ON reng.fk_renginio_tipas_id = rt.id
+            LEFT JOIN
+                MIESTAS m ON reng.fk_miesto_id = m.id
+            LEFT JOIN 
+                MIKRORAJONAS mik ON reng.fk_mikrorajono_id = mik.id
+            WHERE 
+                reng.id = ?
+        ";
+
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public static function fetchEventSocialGroups($dbc, $event_id) {
+        $query = "
+            SELECT sg.pavadinimas AS group_name 
+            FROM RENGINIAI_GRUPES rg
+            LEFT JOIN SOCIALINES_GRUPES sg ON rg.fk_socialines_grupes_id = sg.id
+            WHERE rg.fk_renginio_id = ?
+        ";
+
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function fetchEventPhotos($dbc, $event_id) {
+        $query = "
+            SELECT nuot.nuotraukos_kelias
+            FROM RENGINIU_NUOTRAUKOS nuot
+            WHERE nuot.fk_renginio_id = ?
+        ";
+
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function fetchPreviousEvent($dbc, $event_id) {
+        $query = "SELECT id, pavadinimas FROM RENGINYS WHERE id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public static function deleteEvent($dbc, $event_id) {
+        $dbc->prepare("DELETE FROM RENGINIAI_GRUPES WHERE fk_renginio_id = ?")
+            ->bind_param("i", $event_id)
+            ->execute();
+
+        $dbc->prepare("DELETE FROM RENGINIU_NUOTRAUKOS WHERE fk_renginio_id = ?")
+            ->bind_param("i", $event_id)
+            ->execute();
+
+        $dbc->prepare("DELETE FROM RENGINYS WHERE id = ?")
+            ->bind_param("i", $event_id)
+            ->execute();
+    }
+
 }
 ?>

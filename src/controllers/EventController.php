@@ -52,5 +52,30 @@ class EventController {
         ];
     }
 
+    public function showEventDetails($event_id) {
+        $eventDetails = Event::fetchEventDetails($this->dbc, $event_id);
+        $socialGroups = Event::fetchEventSocialGroups($this->dbc, $event_id);
+        $photos = Event::fetchEventPhotos($this->dbc, $event_id);
+
+        if (!empty($eventDetails['fk_seno_renginio_id'])) {
+            $previousEvent = Event::fetchPreviousEvent($this->dbc, $eventDetails['fk_seno_renginio_id']);
+        } else {
+            $previousEvent = null;
+        }
+
+        return [
+            'event' => $eventDetails,
+            'social_groups' => $socialGroups,
+            'photos' => $photos,
+            'previous_event' => $previousEvent,
+        ];
+    }
+
+    public function deleteEvent($event_id) {
+        Event::deleteEvent($this->dbc, $event_id);
+        header("Location: all_events.php");
+        exit();
+    }
+
 }
 ?>

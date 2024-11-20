@@ -1,0 +1,30 @@
+.container { max-width: 800px; margin-top: 20px; }
+.event-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+.event-card h1, .event-card h3 {
+    color: #333;
+}
+.event-card p {
+    margin-bottom: 10px;
+}
+.photo-gallery img {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+.no-content {
+    color: #888;
+}
+.previous-event a {
+    color: #337ab7;
+    text-decoration: none;
+}
+.previous-event a:hover {
+    text-decoration: underline;
+}        
