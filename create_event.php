@@ -46,16 +46,10 @@ include 'fetch_event_types.php';
 <body>
     <div class="container-fluid">
         <div class="row content">
-            <div class="col-sm-3 sidenav hidden-xs">
-                <h2>Logo</h2>
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="calendar_page.php">Renginių kalendorius</a></li>
-                    <li><a href="all_events.php">Visi renginiai</a></li>
-                    <li class="active"><a href="create_event.php">Sukurti renginį</a></li>
-                    <li><a href="create_subscription.php">Sukurti norimų renginių prenumeratą</a></li>
-                </ul><br>
-            </div>
+            <?php
+            $activePage = 'create_event';
+            include 'sidebar.php';
+            ?>
             
             <div class="col-sm-9 main-content">
 

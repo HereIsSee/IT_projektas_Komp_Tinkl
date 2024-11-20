@@ -1,7 +1,6 @@
 <?php
-include 'database_connection.php';
 mysqli_set_charset($dbc, "utf8");
-
+echo '<h1> FOUND IT! </h1>'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['city_id'])) {
     $city_id = intval($_POST['city_id']); // Ensure city_id is an integer
 

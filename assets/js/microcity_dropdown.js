@@ -4,7 +4,7 @@ $(document).ready(function() {
 
         if (cityId) {
             $.ajax({
-                url: 'get_microcities.php',
+                url: '../../IT_darbas/src/helpers/get_microcities.php',
                 type: 'POST',
                 data: { city_id: cityId },
                 success: function(response) {
