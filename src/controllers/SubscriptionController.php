@@ -9,12 +9,16 @@ class SubscriptionController {
     }
 
     public function createSubscription($user_id, $postData) {
-        $city_id = $postData['city_id'];
-        $microcity_id = $postData['microcity_id'];
-        $event_types = $postData['event_types'] ?? [];
-        $social_groups = $postData['social_groups'] ?? [];
 
-        return Subscription::createSubscription($this->dbc, $user_id, $city_id, $microcity_id, $event_types, $social_groups);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $city_id = $postData['city_id'];
+            $microcity_id = $postData['microcity_id'];
+            $event_types = $postData['event_types'] ?? [];
+            $social_groups = $postData['social_groups'] ?? [];
+
+            return Subscription::createSubscription($this->dbc, $user_id, $city_id, $microcity_id, $event_types, $social_groups);
+        };
+        
     }
 }
 ?>

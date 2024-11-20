@@ -26,7 +26,7 @@ class Subscription {
             }
         }
 
-        return $user_choice_id;
+        return "Prenumėrata sukurta sėkmingai!";
     }
 }
 ?>

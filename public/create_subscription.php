@@ -7,11 +7,7 @@ require_once '../src/controllers/EventController.php';
 $controller = new SubscriptionController($dbc);
 $controllerEvent = new EventController($dbc);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_SESSION['user_id'];
-    $controller->createSubscription($user_id, $_POST);
-    echo "<p id='success-message' class='alert alert-success'>Prenumėrata sukurta sėkmingai!</p>";
-};
+$message = $controller->createSubscription($_SESSION['user_id'], $_POST);
 
 $data =  $controllerEvent->getCreateEventData();
 include '../src/views/create_subscription_view.php';

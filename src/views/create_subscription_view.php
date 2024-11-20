@@ -23,6 +23,11 @@ $event_types = $data['event_types'];
             ?>
             
             <div class="col-sm-9 main-content">
+
+            <?php if (!empty($message)): ?>
+                <p id="success-message" class="alert alert-success"><?= htmlspecialchars($message) ?></p>
+            <?php endif; ?>
+
             <h2>Sukurti naują prenumeratą</h2>
 
             <form action="create_subscription.php" method="post" class="form">

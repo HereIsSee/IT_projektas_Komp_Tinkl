@@ -9,6 +9,11 @@ if ($_SESSION['vaidmuo'] === 'vartotojas') {
     exit();
 }
 
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $user_id = $_SESSION['user_id'];
+//     $controller->createSubscription($user_id, $_POST);
+//     echo "<p id='success-message' class='alert alert-success'>Prenumėrata sukurta sėkmingai!</p>";
+// };
 $message = $controller->handleCreateEvent();
 $data = $controller->getCreateEventData();
 
