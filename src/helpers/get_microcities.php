@@ -1,5 +1,6 @@
 <?php
-require_once '../config/database_connection.php';
+// require_once '../config/database_connection.php';
+require_once '../../config/database_connection.php';
 mysqli_set_charset($dbc, "utf8");
 echo '<h1> FOUND IT! </h1>';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' or isset($_POST['city_id'])) {

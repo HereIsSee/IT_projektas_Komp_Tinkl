@@ -56,10 +56,10 @@ class Calendar {
             // Check for events on each day
             foreach ($this->events as $event) {
                 // Display the event if it falls on the current date
-                if (date('Y-m-d', strtotime($event->date)) == date('Y-m-d', strtotime("{$this->active_year}-{$this->active_month}-$i"))) {
+                if (date('Y-m-d', strtotime($event->getDate())) == date('Y-m-d', strtotime("{$this->active_year}-{$this->active_month}-$i"))) {
                     $html .= '<div class="event" style="background-color:' . htmlspecialchars("orange") . ';">';
-                    $html .= '<a href="event_page.php?id=' . urlencode($event->id) . '" style="color: inherit; text-decoration: none;">';
-					$html .= htmlspecialchars($event->title);
+                    $html .= '<a href="event_page.php?id=' . urlencode($event->getId()) . '" style="color: inherit; text-decoration: none;">';
+					$html .= htmlspecialchars($event->getTitle());
 					$html .= '</a>';
                     $html .= '</div>';
                 }

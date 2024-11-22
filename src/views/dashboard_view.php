@@ -34,7 +34,8 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php foreach ($event_selections as $selection_id => $selection): ?>
                     <div class="event-selection-container">
                         <h3>Renginio pasirinkimas #<?= htmlspecialchars($selection_id) ?></h3>
-                        <p><strong>Renginio vieta:</strong> <?= htmlspecialchars($selection['location']) ?></p>
+                        <p><strong>Renginio miestas:</strong> <?= htmlspecialchars($selection['city']) ?></p>
+                        <p><strong>Renginio mikrorajonas:</strong> <?= htmlspecialchars($selection['microcity']) ?></p>
                         <p><strong>Renginių tipai:</strong> <?= htmlspecialchars(implode(', ', $selection['event_types'])) ?></p>
                         <p><strong>Socialinės grupės:</strong> <?= htmlspecialchars(implode(', ', $selection['social_groups'])) ?></p>
                     </div>

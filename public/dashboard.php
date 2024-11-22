@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $controller = new DashboardController($dbc);
-$event_selections = $controller->getEventSelection($_SESSION['user_id']);
+$event_selections = $controller->getFullSubscriptionsByUserId($_SESSION['user_id']);
 
 require_once '../src/views/dashboard_view.php';
 ?>

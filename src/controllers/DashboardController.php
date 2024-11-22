@@ -1,37 +1,33 @@
 <?php
 require_once '../config/database_connection.php';
-require_once '../src/models/EventSelectionModel.php';
+require_once '../src/models/Subscription.php';
 
 class DashboardController {
     private $dbc;
-    private $eventModel;
 
     public function __construct($dbc) {
         $this->dbc = $dbc;
-        $this->eventModel = new EventSelectionModel($dbc);
     }
 
-    public function getEventSelection($user_id) {
-        $result = $this->eventModel->getEventSelectionByUserId($user_id);
-        
-        $event_selections = [];
+    public function getFullSubscriptionsByUserId($user_id) {
+        $result = Subscription::getSubscriptionsByUserId($this->dbc, $user_id);
+        $subscriptions = [];
         while ($row = $result->fetch_assoc()) {
-            $selection_id = $row['selection_id'];
-            if(!isset($event_selections[$selection_id])){
-                $selections[$selection_id] = [
-                    'location' => $row['location'],
-                    'event_types' => [],
-                    'social_groups' => []
-                ];
+            $subscription_id = $row['subscription_id'];
+            $subscriptions[$subscription_id] = [
+                'city' => $row['city'],
+                'microcity' => $row['microcity'],
+                'event_types' => [],
+                'social_groups' => []
+            ];
+            if ($row['event_type'] && !in_array($row['event_type'], $subscriptions[$subscription_id]['event_types'])) {
+                $subscriptions[$subscription_id]['event_types'][] = $row['event_type'];
             }
-            if ($row['event_type'] && !in_array($row['event_type'], $selections[$selection_id]['event_types'])) {
-                $selections[$selection_id]['event_types'][] = $row['event_type'];
-            }
-            if ($row['social_group'] && !in_array($row['social_group'], $selections[$selection_id]['social_groups'])) {
-                $selections[$selection_id]['social_groups'][] = $row['social_group'];
+            if ($row['social_group'] && !in_array($row['social_group'], $subscriptions[$subscription_id]['social_groups'])) {
+                $subscriptions[$subscription_id]['social_groups'][] = $row['social_group'];
             }
         }
-        return $selections;
+        return $subscriptions;
     }
 }
 ?>

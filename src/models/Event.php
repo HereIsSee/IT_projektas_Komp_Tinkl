@@ -1,25 +1,45 @@
 <?php
 class Event {
-    public $id;
-    public $title;
-    public $date;
-    public $description;
-    public $type_id;
-    public $vip_user_id;
-    public $place_id;
-    public $previous_event_id;
+    private $id;
+    private $title;
+    private $date;
+    private $description;
+    private $address;
+    private $previous_event_id;
+    private $event_type_id;
+    private $vip_user_id;
+    private $city_id;
+    private $microcity_id;
+    
+    
 
-    public function __construct($id, $title, $date, $description, 
-            $type_id, $vip_user_id, $place_id, $previous_event_id = null) {
+    public function __construct($id, $title, $date, $description, $address, $previous_event_id = null,
+            $event_type_id, $vip_user_id, $city_id, $microcity_id) {
         $this->id = $id;
         $this->title = $title;
         $this->date = $date;
         $this->description = $description;
-        $this->type_id = $type_id;
-        $this->vip_user_id = $vip_user_id;
-        $this->place_id = $place_id;
+        $this->address = $address;
         $this->previous_event_id = $previous_event_id;
+        $this->event_type_id = $event_type_id;
+        $this->vip_user_id = $vip_user_id;
+        $this->city_id = $city_id;
+        $this->microcity_id = $microcity_id;
     }
+
+    public function getId(){return $this->id;}
+
+    public function getTitle(){return $this->title;}
+    public function getDate(){return $this->date;}
+    public function getDescription(){return $this->description;}
+    public function getAddress(){return $this->address;}
+    
+    public function getPreviousEventId(){return $this->previous_event_id;}
+    public function getEventTypeId(){return $this->event_type_id;}
+    public function getVipUserId(){return $this->vip_user_id;}
+    public function getCityId(){return $this->city_id;}
+    public function getMicrocityId(){return $this->microcity_id;}
+
 
 
     public static function getEventsFromDB($dbc, $month, $year) {
@@ -149,7 +169,7 @@ class Event {
 
     public static function fetchEventSocialGroups($dbc, $event_id) {
         $query = "
-            SELECT sg.pavadinimas AS group_name 
+            SELECT sg.pavadinimas AS group_name
             FROM RENGINIAI_GRUPES rg
             LEFT JOIN SOCIALINES_GRUPES sg ON rg.fk_socialines_grupes_id = sg.id
             WHERE rg.fk_renginio_id = ?
@@ -159,6 +179,19 @@ class Event {
         $stmt->bind_param("i", $event_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    public static function fetchEventSocialGroupsIds($dbc, $event_id) {
+        $query = "
+            SELECT sg.id
+            FROM RENGINIAI_GRUPES rg
+            LEFT JOIN SOCIALINES_GRUPES sg ON rg.fk_socialines_grupes_id = sg.id
+            WHERE rg.fk_renginio_id = ?
+        ";
+
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        return $stmt->get_result();
     }
 
     public static function fetchEventPhotos($dbc, $event_id) {
