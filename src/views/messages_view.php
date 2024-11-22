@@ -23,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
         include 'sidebar.php';
         ?>
         <div class="col-sm-9">
-        <h2>Visi renginiai</h2>
+        <h2>Visos žinutės</h2>
             <?php if (empty($messages)): ?>
                 <p>Žinučių nerasta.</p>
             <?php else: ?>

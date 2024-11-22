@@ -6,6 +6,6 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
-$messages = Message::getUserMessages($dbc, $_SESSION['user_id']);
+$messages = MessageController::getUserMessages($dbc, $_SESSION['user_id']);
 require_once '../src/views/messages_view.php';
 ?>

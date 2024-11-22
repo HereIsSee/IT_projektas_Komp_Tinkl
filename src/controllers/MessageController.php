@@ -15,6 +15,7 @@ class MessageController{
                 'event_id' => $row['event_id'],
             ];
         }
+        return $messages;
     }
 
     public function getFullSubscriptionsByUserId($user_id) {

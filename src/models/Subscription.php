@@ -129,29 +129,23 @@ class Subscription {
         if($row['city_id'] == $event->getCityId())
         {
             $is_in_the_same_city = true;
-        }else {
-            error_log("City mismatch: Subscription City {$row['city_id']} vs Event City {$event->getCityId()}");
         }
         foreach($event_type_ids as $event_type_id){
             if($event_type_id == $event->getEventTypeId()){
                 $has_at_least_one_matching_event_type = true;
-                error_log("Event type matched ");
+                
                 break;
             }
         }
-        if (!$has_at_least_one_matching_event_type) {
-            error_log("Event type mismatch: Event Type {$event->getEventTypeId()} vs Subscription Types " . implode(',', $event_type_ids));
-        }
+
         foreach($social_group_ids as $social_group_id){
             $matched_social_group_ids = Event::fetchEventSocialGroupsIds($dbc, $event->getId());
             while ($row = $matched_social_group_ids->fetch_assoc()) {
                 $social_group_id_from_event = $row['id'];
                 if($social_group_id == $social_group_id_from_event){
                     $has_at_least_one_matching_social_group = true;
-                    error_log("Social group matched ");
+
                     break;
-                }else{
-                    error_log("Social group mismatch: {$social_group_id}, {$social_group_id_from_event} ");
                 }
             }
             if($has_at_least_one_matching_social_group){
