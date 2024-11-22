@@ -14,18 +14,25 @@ class Message{
         $this->fk_event_selection_id = $fk_event_selection_id;
     }
 
-    public static function getUserMessages($dbc, $user_id){
+    public static function getUserNewEventMessages($dbc, $user_id){
         $query = "
         SELECT
             z.id,
             z.antraste AS heading, 
             z.fk_vartotojo_pasirinkimo_id AS subscription_id,
-            z.fk_renginio_id AS event_id
+            z.fk_renginio_id AS event_id,
+            reng.pavadinimas AS event_title,
+            vp.pavadinimas AS subscription_title
         FROM 
             ZINUTE z
+        LEFT JOIN
+            RENGINYS reng ON reng.id = z.fk_renginio_id
+        LEFT JOIN
+            VARTOTOJO_PASIRINKIMAI vp ON vp.id = z.fk_vartotojo_pasirinkimo_id
         WHERE
-            fk_vartotojo_id = ?
+            z.fk_vartotojo_id = ?
         ";
+
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("i", $user_id);
         $stmt->execute();

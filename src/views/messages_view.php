@@ -29,12 +29,12 @@ if (session_status() === PHP_SESSION_NONE) {
             <?php else: ?>
                 <?php foreach ($messages as $message): ?>
                     <div class="event-card">
-                        <h3>
-                            <a href="event_page.php?id=<?= urlencode($message['event_id']); ?>" style="color: inherit; text-decoration: none;">
-                                <?= htmlspecialchars($message['heading']); ?>
-                            </a>
-                        </h3>
                         
+                        <a href="event_page.php?id=<?= urlencode($message['event_id']); ?>" style="color: inherit; text-decoration: none;">
+                            <p class ="dispaly-4 lead"><?= htmlspecialchars($message['heading']); ?> <h3>"<?= htmlspecialchars($message['event_title']); ?>"</h3></p>
+                        </a>        
+                        
+                        <p>Jūs gavote šią žinute dėl prenumeratos: "<?= htmlspecialchars($message['subscription_title']); ?>"</p>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
