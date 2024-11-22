@@ -26,12 +26,12 @@
                 <?php foreach ($events as $event): ?>
                     <div class="event-card">
                         <h3>
-                            <a href="event_page.php?id=<?= urlencode($event->id); ?>" style="color: inherit; text-decoration: none;">
-                                <?= htmlspecialchars($event->title); ?>
+                            <a href="event_page.php?id=<?= urlencode($event->getId()); ?>" style="color: inherit; text-decoration: none;">
+                                <?= htmlspecialchars($event->getTitle()); ?>
                             </a>
                         </h3>
-                        <p><strong>Data:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($event->date))); ?></p>
-                        <p><strong>Aprašymas:</strong> <?= htmlspecialchars($event->description); ?></p>
+                        <p><strong>Data:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($event->getDate()))); ?></p>
+                        <p><strong>Aprašymas:</strong> <?= htmlspecialchars($event->getDescription()); ?></p>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
