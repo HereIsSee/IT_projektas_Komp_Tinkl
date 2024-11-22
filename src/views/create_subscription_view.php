@@ -29,8 +29,12 @@ $event_types = $data['event_types'];
             <?php endif; ?>
 
             <h2>Sukurti naują prenumeratą</h2>
-
+            
             <form action="create_subscription.php" method="post" class="form">
+                <div class="form-group">
+                    <label for="title">Prenumeratos pavadinimas:</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
                 <div class="form-group">
                     <h2>Renginio vieta</h2>
                     <label for="city_id">Renginio miestas:</label>

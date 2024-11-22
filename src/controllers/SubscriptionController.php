@@ -11,12 +11,13 @@ class SubscriptionController {
     public function createSubscription($user_id, $postData) {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = $postData['title'];
             $city_id = $postData['city_id'];
             $microcity_id = $postData['microcity_id'];
             $event_types = $postData['event_types'] ?? [];
             $social_groups = $postData['social_groups'] ?? [];
 
-            return Subscription::createSubscription($this->dbc, $user_id, $city_id, $microcity_id, $event_types, $social_groups);
+            return Subscription::createSubscription($this->dbc, $title, $user_id, $city_id, $microcity_id, $event_types, $social_groups);
         };
         
     }

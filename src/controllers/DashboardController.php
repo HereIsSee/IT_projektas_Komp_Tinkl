@@ -15,6 +15,7 @@ class DashboardController {
         while ($row = $result->fetch_assoc()) {
             $subscription_id = $row['subscription_id'];
             $subscriptions[$subscription_id] = [
+                'title' => $row['title'],
                 'city' => $row['city'],
                 'microcity' => $row['microcity'],
                 'event_types' => [],

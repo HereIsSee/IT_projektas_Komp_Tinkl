@@ -18,10 +18,10 @@ class Subscription {
         $this->user_subscription_id = $user_subscription_id;
     }
 
-    public static function createSubscription($dbc, $user_id, $city_id, $microcity_id, $event_types, $social_groups) {
-        $query = "INSERT INTO VARTOTOJO_PASIRINKIMAI (fk_vartotojo_id, fk_miesto_id, fk_mikrorajono_id) VALUES (?, ?, ?)";
+    public static function createSubscription($dbc, $title, $user_id, $city_id, $microcity_id, $event_types, $social_groups) {
+        $query = "INSERT INTO VARTOTOJO_PASIRINKIMAI (pavadinimas, fk_vartotojo_id, fk_miesto_id, fk_mikrorajono_id) VALUES (?, ?, ?, ?)";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("iii", $user_id, $city_id, $microcity_id);
+        $stmt->bind_param("siii", $title, $user_id, $city_id, $microcity_id);
         $stmt->execute();
         $user_choice_id = $stmt->insert_id;
 
@@ -48,7 +48,8 @@ class Subscription {
 
     public static function getSubscriptionsByUserId($dbc, $user_id){
         $query = "
-        SELECT 
+        SELECT
+            vp.pavadinimas AS title, 
             vp.id AS subscription_id,
             m.miestas AS city,
             mikr.pavadinimas AS microcity,
@@ -82,7 +83,8 @@ class Subscription {
     
     public static function getSubscriptionData($dbc, $subscription_id){
         $query = "
-        SELECT 
+        SELECT
+            vp.pavadinimas AS title, 
             vp.id AS selection_id,
             m.id AS city_id,
             m.miestas AS city,

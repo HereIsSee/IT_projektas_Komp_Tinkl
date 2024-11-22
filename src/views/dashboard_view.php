@@ -33,7 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <?php else: ?>
                 <?php foreach ($event_selections as $selection_id => $selection): ?>
                     <div class="event-selection-container">
-                        <h3>Renginio pasirinkimas #<?= htmlspecialchars($selection_id) ?></h3>
+                        <h3>Prenumerata "<?= htmlspecialchars($selection['title']) ?>"</h3>
                         <p><strong>Renginio miestas:</strong> <?= htmlspecialchars($selection['city']) ?></p>
                         <p><strong>Renginio mikrorajonas:</strong> <?= htmlspecialchars($selection['microcity']) ?></p>
                         <p><strong>Renginių tipai:</strong> <?= htmlspecialchars(implode(', ', $selection['event_types'])) ?></p>
