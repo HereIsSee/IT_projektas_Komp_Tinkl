@@ -30,12 +30,11 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php foreach ($messages as $message): ?>
                     <div class="event-card">
                         <h3>
-                            <a href="message.php?id=<?= urlencode($message->id); ?>" style="color: inherit; text-decoration: none;">
-                                <?= htmlspecialchars($event->title); ?>
+                            <a href="event_page.php?id=<?= urlencode($message['event_id']); ?>" style="color: inherit; text-decoration: none;">
+                                <?= htmlspecialchars($message['heading']); ?>
                             </a>
                         </h3>
-                        <p><strong>Data:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($event->date))); ?></p>
-                        <p><strong>Aprašymas:</strong> <?= htmlspecialchars($event->description); ?></p>
+                        
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>

@@ -90,7 +90,7 @@ class EventController {
 
             while ($row_subscription = $subscriptions->fetch_assoc()){
                 if(Subscription::userIsInterestedInEvent($this->dbc, $event, $row_subscription['subscription_id'])){
-                    Message::createMessage($this->dbc, "New event that matches your subscription!", "", $user_id, $row_subscription['subscription_id']);
+                    Message::createMessage($this->dbc, "New event that matches your subscription!", "", $user_id, $row_subscription['subscription_id'], $event->getId());
                     break;
                 }
             }
