@@ -17,7 +17,7 @@
             <h1><?= htmlspecialchars($event['event_title']) ?></h1>
             <p><strong>Data:</strong> <?= htmlspecialchars($event['event_date']) ?></p>
             <p><strong>Renginio tipas:</strong> <?= htmlspecialchars($event['event_type']) ?></p>
-            <p><strong>Aprašymas:</strong> <?= htmlspecialchars($event['description']) ?></p>
+            <p><strong>Aprašymas:</strong> <br> <?= nl2br(htmlspecialchars($event['description'])) ?></p>
 
             <h3>Renginio vietos detalės</h3>
             <p><strong>Miestas:</strong> <?= htmlspecialchars($event['miestas']) ?></p>
