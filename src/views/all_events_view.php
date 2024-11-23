@@ -98,7 +98,7 @@
                             </a>
                         </h3>
                         <p><strong>Data:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($event->getDate()))); ?></p>
-                        <p><strong>Aprašymas:</strong> <?= htmlspecialchars($event->getDescription()); ?></p>
+                        <p><strong>Aprašymas:</strong> <?= nl2br(htmlspecialchars($event->getDescription())); ?></p>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>

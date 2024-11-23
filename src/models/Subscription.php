@@ -25,12 +25,16 @@ class Subscription {
         $stmt->execute();
         $user_choice_id = $stmt->insert_id;
 
+        self::updateTableRowPopularity($dbc, 'MIESTAS', $city_id);
+        self::updateTableRowPopularity($dbc, 'MIKRORAJONAS', $microcity_id);
+
         if (!empty($event_types)) {
             $query = "INSERT INTO VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI (fk_vartotojo_pasirinkimo_id, fk_renginio_tipo_id) VALUES (?, ?)";
             $stmt = $dbc->prepare($query);
             foreach ($event_types as $event_type_id) {
                 $stmt->bind_param("ii", $user_choice_id, $event_type_id);
                 $stmt->execute();
+                self::updateTableRowPopularity($dbc, 'RENGINIO_TIPAS', $event_type_id);
             }
         }
 
@@ -40,11 +44,45 @@ class Subscription {
             foreach ($social_groups as $group_id) {
                 $stmt->bind_param("ii", $user_choice_id, $group_id);
                 $stmt->execute();
+                self::updateTableRowPopularity($dbc, 'SOCIALINES_GRUPES', $group_id);
             }
         }
 
         return "Prenumėrata sukurta sėkmingai!";
     }
+
+    public static function updateTableRowPopularity($dbc, $table_name, $table_row_id) {
+        $allowed_tables = ['MIESTAS', 'MIKRORAJONAS', 'SOCIALINES_GRUPES', 'RENGINIO_TIPAS'];
+        if (!in_array($table_name, $allowed_tables)) {
+            throw new Exception("Invalid table name.");
+        }
+    
+        $query = "SELECT kartu_panaudotas FROM $table_name WHERE id = ?";
+        $stmt = $dbc->prepare($query);
+        if (!$stmt) {
+            throw new Exception("SQL preparation failed: " . $dbc->error);
+        }
+        $stmt->bind_param("i", $table_row_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    
+        if ($row) {
+            $number_of_times_referenced = $row['kartu_panaudotas'];
+            $number_of_times_referenced += 1;
+    
+            $query = "UPDATE $table_name SET kartu_panaudotas = ? WHERE id = ?";
+            $stmt = $dbc->prepare($query);
+            if (!$stmt) {
+                throw new Exception("SQL preparation failed: " . $dbc->error);
+            }
+            $stmt->bind_param("ii", $number_of_times_referenced, $table_row_id);
+            $stmt->execute();
+        } else {
+            throw new Exception("Row not found in table $table_name with id $table_row_id.");
+        }
+    }
+    
 
     public static function getSubscriptionsByUserId($dbc, $user_id){
         $query = "
