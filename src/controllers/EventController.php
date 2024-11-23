@@ -71,6 +71,7 @@ class EventController {
     public function getCreateEventData() {
         return [
             'cities' => DatabaseHelper::fetchAll($this->dbc, 'MIESTAS'),
+            'microcities' => DatabaseHelper::fetchAll($this->dbc, 'MIKRORAJONAS'),
             'social_groups' => DatabaseHelper::fetchAll($this->dbc, 'SOCIALINES_GRUPES'),
             'event_types' => DatabaseHelper::fetchAll($this->dbc, 'RENGINIO_TIPAS')
         ];

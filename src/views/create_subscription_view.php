@@ -41,7 +41,7 @@ $event_types = $data['event_types'];
                     <select class="form-control" id="city_id" name="city_id" required>
                         <option value="">--Pasirinkite miestą--</option>
                         <?php foreach ($cities as $city): ?>
-                            <option value="<?= $city['id'] ?>"><?= htmlspecialchars($city['miestas']) ?></option>
+                            <option value="<?= $city['id'] ?>"><?= htmlspecialchars($city['miestas']) ?> | populiarumas: <?= htmlspecialchars($city['kartu_panaudotas']) ?></option>
                         <?php endforeach; ?>
                     </select>
                     
@@ -55,7 +55,7 @@ $event_types = $data['event_types'];
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" name="event_types[]" value="<?= $event_type['id'] ?>">
-                                <?= htmlspecialchars($event_type['pavadinimas']) ?>
+                                <?= htmlspecialchars($event_type['pavadinimas']) ?> | populiarumas: <?= htmlspecialchars($event_type['kartu_panaudotas']) ?>
                             </label>
                         </div>
                     <?php endforeach; ?>
@@ -67,7 +67,7 @@ $event_types = $data['event_types'];
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" name="social_groups[]" value="<?= $group['id'] ?>">
-                                <?= htmlspecialchars($group['pavadinimas']) ?>
+                                <?= htmlspecialchars($group['pavadinimas']) ?> | populiarumas: <?= htmlspecialchars($group['kartu_panaudotas']) ?>
                             </label>
                         </div>
                     <?php endforeach; ?>

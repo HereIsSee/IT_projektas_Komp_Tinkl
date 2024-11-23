@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' or isset($_POST['city_id'])) {
     $city_id = intval($_POST['city_id']); // Ensure city_id is an integer
 
     // Query to fetch microcities associated with the selected city
-    $query = "SELECT id, pavadinimas FROM MIKRORAJONAS WHERE fk_miesto_id = ?";
+    $query = "SELECT id, pavadinimas, kartu_panaudotas FROM MIKRORAJONAS WHERE fk_miesto_id = ?";
     $stmt = $dbc->prepare($query);
     $stmt->bind_param("i", $city_id);
     $stmt->execute();
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' or isset($_POST['city_id'])) {
     // Generate dropdown options for microcities
     echo '<option value="">-- Pasirinkite mikrorajoną --</option>';
     while ($row = $result->fetch_assoc()) {
-        echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['pavadinimas']) . '</option>';
+        echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['pavadinimas']) .  " | populiarumas: " . htmlspecialchars($row['kartu_panaudotas']) . '</option>';
     }
 }
 ?>
