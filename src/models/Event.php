@@ -99,6 +99,96 @@ class Event {
 		return $events;
 	}
 
+    public static function getFilteredEvents($dbc, $title, $date_from, $date_to, $city_id, $microcity_id, $event_type, $social_groups) {
+        $events = [];
+        $query = "
+            SELECT r.*
+            FROM RENGINYS r
+            LEFT JOIN RENGINIAI_GRUPES rg ON r.id = rg.fk_renginio_id
+            WHERE 1=1
+        ";
+        $params = [];
+        $types = '';
+    
+        // Dynamically add conditions to the query
+        if (!empty($title)) {
+            $query .= " AND r.pavadinimas LIKE ?";
+            $params[] = '%' . $title . '%';
+            $types .= 's';
+        }
+        if (!empty($date_from)) {
+            $query .= " AND r.renginio_data >= ?";
+            $params[] = $date_from;
+            $types .= 's';
+        }
+        if (!empty($date_to)) {
+            $query .= " AND r.renginio_data <= ?";
+            $params[] = $date_to;
+            $types .= 's';
+        }
+        if ($city_id !== 'default') {
+            $query .= " AND r.fk_miesto_id = ?";
+            $params[] = $city_id;
+            $types .= 'i';
+        }
+        if ($microcity_id !== 'default' && $microcity_id !== '') {
+            $query .= " AND r.fk_mikrorajono_id = ?";
+            $params[] = $microcity_id;
+            $types .= 'i';
+        }
+        if ($event_type !== 'default') {
+            $query .= " AND r.fk_renginio_tipas_id = ?";
+            $params[] = $event_type;
+            $types .= 'i';
+        }
+        if (!empty($social_groups)) {
+            $placeholders = implode(',', array_fill(0, count($social_groups), '?'));
+            $query .= " AND rg.fk_socialines_grupes_id IN ($placeholders)";
+            foreach ($social_groups as $group) {
+                $params[] = $group;
+                $types .= 'i';
+            }
+        }
+    
+        $query .= " GROUP BY r.id";
+    
+        // error_log("Query: $query");
+        // error_log("Params: " . json_encode($params));
+    
+        $stmt = $dbc->prepare($query);
+        if (!$stmt) {
+            die("Database query failed: " . $dbc->error);
+        }
+    
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Process results
+        while ($row = $result->fetch_assoc()) {
+            $events[] = new Event(
+                $row['id'],
+                $row['pavadinimas'],
+                $row['renginio_data'],
+                $row['aprasymas'],
+                $row['adresas'],
+                $row['fk_renginio_tipas_id'],
+                $row['fk_vip_vartotojo_id'],
+                $row['fk_miesto_id'],
+                $row['fk_mikrorajono_id'],
+                $row['fk_seno_renginio_id']
+            );
+        }
+    
+        return $events;
+    }
+    
+    
+    
+
     public static function createEvent($dbc, $data){
         $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, adresas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_miesto_id, fk_mikrorajono_id)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

@@ -1,0 +1,18 @@
+#form-container {
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+.hidden {
+    max-height: 0;
+}
+.shown {
+    max-height: 1000px;
+}
+.toggle-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}

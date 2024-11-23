@@ -1,3 +1,11 @@
+#dates_from_to {
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+}
+#dates_from_to > * {
+    flex: 1; /* Each child will take up an equal portion of the row */
+}
 .main-content {
     display: flex;
     flex-direction: column;

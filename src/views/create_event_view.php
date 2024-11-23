@@ -43,6 +43,7 @@
                     <div class="form-group">
 						<label for="event_type">Renginio tipas:</label>
                         <select class="form-control" id="event_type" name="event_type" required>
+                            <option value="default">--Pasirinkite renginio tipą--</option>
 							<?php foreach ($data['event_types'] as $event_type): ?>
 								<option value="<?= $event_type['id'] ?>">
 									<?= htmlspecialchars($event_type['pavadinimas']) ?>

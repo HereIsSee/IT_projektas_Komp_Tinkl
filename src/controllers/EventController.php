@@ -47,6 +47,25 @@ class EventController {
 
         return null;
     }
+    public function getFilteredEvents($postData) {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            
+            $title = $postData['title'];
+            $date_from = $postData['date_from'];
+            $date_to = $postData['date_to'];
+            $city_id = $postData['city_id'];
+            $microcity_id = $postData['microcity_id'];
+            $event_type = $postData['event_type'];
+            $social_groups = $postData['social_groups'] ?? [];
+
+            return Event::getFilteredEvents($this->dbc, $title, $date_from, $date_to, $city_id, $microcity_id, $event_type, $social_groups);
+
+        }else{
+            return Event::getAllEventsFromDB($this->dbc);
+        }
+
+        return null;
+    }
 
     public function getCreateEventData() {
         return [
