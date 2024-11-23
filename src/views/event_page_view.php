@@ -1,11 +1,3 @@
-
-<?php
-$event = $data['event'];
-$social_groups = $data['social_groups'];
-$photos = $data['photos'];
-$previous_event = $data['previous_event'];
-?>            
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,9 +34,10 @@ $previous_event = $data['previous_event'];
             <h3>Renginio nuotraukos</h3>
             <div class="photo-gallery">
                 <?php foreach ($photos as $photo): ?>
-                    <img src="<?= htmlspecialchars($photo['nuotraukos_kelias']) ?>" style="max-width: 300px; height: auto;">
+                    <img src="<?= htmlspecialchars($photo) ?>" style="max-width: 300px; height: auto;">
                 <?php endforeach; ?>
             </div>
+
 
             <?php if ($previous_event): ?>
                 <h3>Preiti panašūs renginiai</h3>

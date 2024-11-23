@@ -40,6 +40,7 @@ class EventController {
 
             if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
                 Event::uploadImages($this->dbc, $event_id, $_SESSION['user_id'], $_FILES['images']);
+                error_log("GOT HERE!!!");
             }
             $this->sendMessagesAboutEventToSubscribedUsers($event);
             return "Renginys sukurtas sėkmingai!";
@@ -90,7 +91,7 @@ class EventController {
             'event' => $eventDetails,
             'social_groups' => $socialGroups,
             'photos' => $photos,
-            'previous_event' => $previousEvent,
+            'previous_event' => $previousEvent
         ];
     }
 

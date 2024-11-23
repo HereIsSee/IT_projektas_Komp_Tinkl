@@ -209,17 +209,19 @@ class Event {
     }
 
     public static function uploadImages($dbc, $event_id, $user_id, $files){
-        $targetDir = "../assets/images/" . $user_id . "/";
+        $targetDir = "../assets/images/" . $user_id . "/" . $event_id . "/";
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0777, true);
         }
-
+        error_log("files Event.php: " . json_encode($files));
         $query = "INSERT INTO RENGINIU_NUOTRAUKOS (nuotraukos_kelias, fk_renginio_id) VALUES (?, ?)";
         $stmt = $dbc->prepare($query);
 
         foreach ($files['name'] as $key => $file_name) {
             $targetFilePath = $targetDir . basename($file_name);
             if (!file_exists($targetFilePath) && move_uploaded_file($files["tmp_name"][$key], $targetFilePath)) {
+            // if (move_uploaded_file($files["tmp_name"][$key], $targetFilePath)) {
+            
                 $stmt->bind_param("si", $targetFilePath, $event_id);
                 $stmt->execute();
             }
@@ -286,7 +288,7 @@ class Event {
 
     public static function fetchEventPhotos($dbc, $event_id) {
         $query = "
-            SELECT nuot.nuotraukos_kelias
+            SELECT nuot.nuotraukos_kelias AS photo
             FROM RENGINIU_NUOTRAUKOS nuot
             WHERE nuot.fk_renginio_id = ?
         ";
@@ -294,7 +296,15 @@ class Event {
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("i", $event_id);
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $result = $stmt->get_result();
+        error_log("event_id Event.php: " . $event_id);
+        error_log("photos paths Event.php: " . json_encode($result));
+        $photos = [];
+        while ($row = $result->fetch_assoc()) {
+            $photos[] = $row['photo'];
+        }
+        error_log("photos paths EVENT.php: " . json_encode($photos));
+        return $photos;
     }
 
     public static function fetchPreviousEvent($dbc, $event_id) {
