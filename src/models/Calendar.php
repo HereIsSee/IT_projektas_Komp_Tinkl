@@ -30,12 +30,25 @@ class Calendar {
 
         $html = '<div class="calendar">';
         
-        // Navigation controls for month adjustment
+        $prev_month = $this->active_month - 1;
+        $prev_year = $this->active_year;
+        if ($prev_month < 1) {
+            $prev_month = 12;
+            $prev_year--;
+        }
+
+        $next_month = $this->active_month + 1;
+        $next_year = $this->active_year;
+        if ($next_month > 12) {
+            $next_month = 1;
+            $next_year++;
+        }
         $html .= '<div class="header">';
-        $html .= '<a href="?month=' . ($this->active_month - 1) . '&year=' . $this->active_year . '" class="prev">&laquo; Previous</a>';
-        $html .= '<div class="month-year">' . date('F Y', strtotime($this->active_year . '-' . $this->active_month . '-' . $this->active_day)) . '</div>';
-        $html .= '<a href="?month=' . ($this->active_month + 1) . '&year=' . $this->active_year . '" class="next">Next &raquo;</a>';
+        $html .= '<a href="?month=' . $prev_month . '&year=' . $prev_year . '" class="prev">&laquo; Previous</a>';
+        $html .= '<div class="month-year">' . date('F Y', strtotime($this->active_year . '-' . $this->active_month . '-01')) . '</div>';
+        $html .= '<a href="?month=' . $next_month . '&year=' . $next_year . '" class="next">Next &raquo;</a>';
         $html .= '</div>';
+        
 
         // Days of the week
         $html .= '<div class="days">';
