@@ -216,17 +216,21 @@ class Event {
     }
 
     public static function deleteEvent($dbc, $event_id) {
-        $dbc->prepare("DELETE FROM RENGINIAI_GRUPES WHERE fk_renginio_id = ?")
-            ->bind_param("i", $event_id)
-            ->execute();
+        $query = "DELETE FROM RENGINIAI_GRUPES WHERE fk_renginio_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
 
-        $dbc->prepare("DELETE FROM RENGINIU_NUOTRAUKOS WHERE fk_renginio_id = ?")
-            ->bind_param("i", $event_id)
-            ->execute();
+        $query = "DELETE FROM RENGINIU_NUOTRAUKOS WHERE fk_renginio_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
 
-        $dbc->prepare("DELETE FROM RENGINYS WHERE id = ?")
-            ->bind_param("i", $event_id)
-            ->execute();
+        $query = "DELETE FROM RENGINYS WHERE id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+
     }
 
 }
