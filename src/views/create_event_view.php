@@ -89,6 +89,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="old_event_id">Senas panašus renginys:</label>
+						
+                        <select class="form-control" id="old_event_id" name="old_event_id">
+                            <option value="default">--Pasirinkite renginį--</option>
+							<?php foreach ($old_user_events as $old_event): ?>
+								<option value="<?= $old_event->getId() ?>">
+									<?= htmlspecialchars($old_event->getTitle()) ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="images">Ikelkite nuotraukas:</label>
                         <input type="file" class="form-control" id="images" name="images[]" multiple>
                     </div>

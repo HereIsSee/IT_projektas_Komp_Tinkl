@@ -14,6 +14,7 @@ if ($_SESSION['vaidmuo'] === 'vartotojas') {
 
 $message = $controller->handleCreateEvent();
 $data = $controller->getCreateEventData();
+$old_user_events = $controller->getEventsCreatedByUser($_SESSION['user_id']);
 
 include '../src/views/create_event_view.php';
 ?>

@@ -28,11 +28,11 @@ class EventController {
                 'event_type_id' => $_POST['event_type'],
                 'city_id' => $_POST['city_id'],
                 'microcity_id' => $_POST['microcity_id'],
+                'old_event_id' => $_POST['old_event_id'],
                 'user_id' => $_SESSION['user_id'],
                 'vip_specialization' => $_SESSION['vip_specialization'],
             ];
             $event_type_id = Event::verifyEventTypeSelected($data);
-
             $event_id = Event::createEvent($this->dbc, $data);
 
             $event = new Event( $event_id, $data['title'], $data['date'], $data['description'], 
@@ -70,6 +70,10 @@ class EventController {
         }
 
         return null;
+    }
+
+    public function getEventsCreatedByUser($user_id){
+        return Event::getEventsCreatedByUser($this->dbc, $user_id);
     }
 
     public function getCreateEventData() {

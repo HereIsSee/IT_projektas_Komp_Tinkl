@@ -98,6 +98,40 @@ class Event {
         return $row['microcity'];
     }
 
+    public static function getEventsCreatedByUser($dbc, $user_id){
+        $query = "
+        SELECT
+            *
+        FROM
+            RENGINYS r
+        WHERE
+            r.fk_vip_vartotojo_id = ?   
+        ";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $events = [];
+        while ($row = $result->fetch_assoc()) {
+            $events[] = new Event(
+                $row['id'],
+				$row['pavadinimas'],
+				$row['renginio_data'],
+				$row['aprasymas'],
+                $row['adresas'],
+				$row['fk_renginio_tipas_id'],
+				$row['fk_vip_vartotojo_id'],
+				$row['fk_miesto_id'],
+                $row['fk_mikrorajono_id'],
+				$row['fk_seno_renginio_id']
+            );
+        }
+
+        return $events;
+    }
+
     public static function getEventsFromDB($dbc, $month, $year) {
         $events = [];
         $query = "SELECT * FROM RENGINYS WHERE MONTH(renginio_data) = ? AND YEAR(renginio_data) = ?";
@@ -246,17 +280,24 @@ class Event {
     
 
     public static function createEvent($dbc, $data){
-        $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, adresas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_miesto_id, fk_mikrorajono_id)
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, adresas, fk_seno_renginio_id, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_miesto_id, fk_mikrorajono_id)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $event_type_id = self::verifyEventTypeSelected($data);
-
+        $old_event_id = self::verifyOldEvent($data);
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("ssssiiii", $data['title'], $data['date'], $data['description'], $data['address'], $event_type_id, $data['user_id'], $data['city_id'], $data['microcity_id']);
+        $stmt->bind_param("ssssiiiii", $data['title'], $data['date'], $data['description'], $data['address'], $old_event_id, $event_type_id, $data['user_id'], $data['city_id'], $data['microcity_id']);
         $stmt->execute();
         return $stmt->insert_id;
     }
 
+    public static function verifyOldEvent($data){
+        $old_event_id = $data['old_event_id'];
+        if($old_event_id == 'default'){
+            $old_event_id = null;
+        }
+        return $old_event_id;
+    }
     public static function verifyEventTypeSelected($data){
         $event_type_id = $data['event_type_id'];
         if($event_type_id == 'default'){
