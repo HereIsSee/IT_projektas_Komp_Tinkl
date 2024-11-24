@@ -28,19 +28,23 @@ class EventController {
                 'event_type_id' => $_POST['event_type'],
                 'city_id' => $_POST['city_id'],
                 'microcity_id' => $_POST['microcity_id'],
-                'user_id' => $_SESSION['user_id']
+                'user_id' => $_SESSION['user_id'],
+                'vip_specialization' => $_SESSION['vip_specialization'],
             ];
+            $event_type_id = Event::verifyEventTypeSelected($data);
 
             $event_id = Event::createEvent($this->dbc, $data);
+
             $event = new Event( $event_id, $data['title'], $data['date'], $data['description'], 
-                $data['address'], null, $data['event_type_id'], $data['user_id'], $data['city_id'], $data['microcity_id']);
+                $data['address'], null, $event_type_id, $data['user_id'], $data['city_id'], $data['microcity_id']);
+            
             if (!empty($_POST['social_groups'])) {
                 Event::addSocialGroups($this->dbc, $event_id, $_POST['social_groups']);
             }
 
             if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
                 Event::uploadImages($this->dbc, $event_id, $_SESSION['user_id'], $_FILES['images']);
-                error_log("GOT HERE!!!");
+                // error_log("GOT HERE!!!");
             }
             $this->sendMessagesAboutEventToSubscribedUsers($event);
             return "Renginys sukurtas sėkmingai!";

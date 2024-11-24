@@ -193,10 +193,20 @@ class Event {
         $query = "INSERT INTO RENGINYS (pavadinimas, renginio_data, aprasymas, adresas, fk_renginio_tipas_id, fk_vip_vartotojo_id, fk_miesto_id, fk_mikrorajono_id)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
+        $event_type_id = self::verifyEventTypeSelected($data);
+
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("ssssiiii", $data['title'], $data['date'], $data['description'], $data['address'], $data['event_type_id'], $data['user_id'], $data['city_id'], $data['microcity_id']);
+        $stmt->bind_param("ssssiiii", $data['title'], $data['date'], $data['description'], $data['address'], $event_type_id, $data['user_id'], $data['city_id'], $data['microcity_id']);
         $stmt->execute();
         return $stmt->insert_id;
+    }
+
+    public static function verifyEventTypeSelected($data){
+        $event_type_id = $data['event_type_id'];
+        if($event_type_id == 'default'){
+            $event_type_id = $data['vip_specialization'];
+        }
+        return $event_type_id;
     }
 
     public static function addSocialGroups($dbc, $event_id, $social_groups){

@@ -33,11 +33,19 @@
                         <option value="vip">VIP</option>
                     </select>
                 </div>
+
+                <!-- Specialization Section -->
+                <div id="specialization-container"></div>
+
                 <button type="submit" class="btn btn-primary btn-block">Registruotis</button>
                 <p class="text-center mt-3">Jau turite prisijungimą? <a href="login.php">Prisijungti</a></p>
             </form>
         </div>
     </div>
 
+    <script>
+        const eventTypes = <?= json_encode($data['event_types']); ?>;
+    </script>
+    <script src="../assets/js/registration_vip_event_type_selection.js"></script>
 </body>
 </html>
