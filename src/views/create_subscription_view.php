@@ -75,6 +75,7 @@ $event_types = $data['event_types'];
                 
                 <button type="submit" class="btn btn-primary">Sukurti prenumeratą</button>
             </form>
+            <div id="subscription-context"></div>
 
             </div>
         </div>
