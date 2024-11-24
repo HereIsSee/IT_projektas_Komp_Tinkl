@@ -40,7 +40,63 @@ class Event {
     public function getCityId(){return $this->city_id;}
     public function getMicrocityId(){return $this->microcity_id;}
 
+    public function getEventType($dbc){
+        $query = "
+        SELECT
+            rt.pavadinimas AS event_type
+        FROM
+            RENGINYS r
+        LEFT JOIN 
+            RENGINIO_TIPAS rt ON r.fk_renginio_tipas_id = rt.id
+        WHERE
+            r.id = ?   
+        ";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
 
+        return $row['event_type'];
+    }
+    public function getCity($dbc){
+        $query = "
+        SELECT
+            m.miestas AS city
+        FROM
+            RENGINYS r
+        LEFT JOIN 
+            MIESTAS m ON r.fk_miesto_id = m.id
+        WHERE
+            r.id = ?   
+        ";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['city'];
+    }
+    public function getMicrocity($dbc){
+        $query = "
+        SELECT
+            mk.pavadinimas AS microcity
+        FROM
+            RENGINYS r
+        LEFT JOIN 
+            MIKRORAJONAS mk ON r.fk_mikrorajono_id = mk.id
+        WHERE
+            r.id = ?   
+        ";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['microcity'];
+    }
 
     public static function getEventsFromDB($dbc, $month, $year) {
         $events = [];
