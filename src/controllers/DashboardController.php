@@ -27,6 +27,9 @@ class DashboardController {
             if ($row['social_group'] && !in_array($row['social_group'], $subscriptions[$subscription_id]['social_groups'])) {
                 $subscriptions[$subscription_id]['social_groups'][] = $row['social_group'];
             }
+            if ($subscription_id == null){
+                return null;
+            }
         }
         return $subscriptions;
     }
