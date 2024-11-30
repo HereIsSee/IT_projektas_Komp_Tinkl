@@ -15,30 +15,14 @@ class MessageController{
                 'subscription_id' => $row['subscription_id'],
                 'event_title' => $row['event_title'],
                 'event_id' => $row['event_id'],
+                'is_message_read' => $row['is_message_read'],
             ];
         }
         return $messages;
     }
 
-    public function getFullSubscriptionsByUserId($user_id) {
-        $result = Subscription::getSubscriptionsByUserId($this->dbc, $user_id);
-        $subscriptions = [];
-        while ($row = $result->fetch_assoc()) {
-            $subscription_id = $row['subscription_id'];
-            $subscriptions[$subscription_id] = [
-                'city' => $row['city'],
-                'microcity' => $row['microcity'],
-                'event_types' => [],
-                'social_groups' => []
-            ];
-            if ($row['event_type'] && !in_array($row['event_type'], $subscriptions[$subscription_id]['event_types'])) {
-                $subscriptions[$subscription_id]['event_types'][] = $row['event_type'];
-            }
-            if ($row['social_group'] && !in_array($row['social_group'], $subscriptions[$subscription_id]['social_groups'])) {
-                $subscriptions[$subscription_id]['social_groups'][] = $row['social_group'];
-            }
-        }
-        return $subscriptions;
+    public static function userHasUnreadMessages($dbc, $user_id){
+        return Message::userHasUnreadMessages($dbc, $user_id);
     }
 }
 ?>

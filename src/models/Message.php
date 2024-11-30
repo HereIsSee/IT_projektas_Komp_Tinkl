@@ -21,6 +21,7 @@ class Message{
             z.antraste AS heading, 
             z.fk_vartotojo_pasirinkimo_id AS subscription_id,
             z.fk_renginio_id AS event_id,
+            z.perskaityta AS is_message_read,
             reng.pavadinimas AS event_title,
             vp.pavadinimas AS subscription_title
         FROM 
@@ -47,6 +48,38 @@ class Message{
         $stmt->bind_param("ssiiii",$heading, $description, $isFalse, $user_id, $subscription_id, $event_id);
         $stmt->execute();
         return $stmt->get_result();
+    }
+
+    public static function userHasUnreadMessages($dbc, $user_id){
+        $query = "
+            SELECT 
+                z.perskaityta
+            FROM
+                ZINUTE AS z
+            WHERE
+                z.fk_vartotojo_id = ?
+        ";
+
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        while ($row = $result->fetch_assoc()){
+            error_log("Is message read:" . $row['perskaityta']);
+            if($row['perskaityta'] == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function setMessageAsRead($dbc, $message_id): void{
+        $query = "UPDATE ZINUTE SET perskaityta = 1 WHERE ZINUTE.id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $message_id);
+        $stmt->execute();
     }
 }
 ?>

@@ -30,8 +30,17 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php foreach ($messages as $message): ?>
                     <div class="event-card">
                         
-                        <a href="event_page.php?id=<?= urlencode($message['event_id']); ?>" style="color: inherit; text-decoration: none;">
-                            <p class ="dispaly-4 lead"><?= htmlspecialchars($message['heading']); ?> <h3>"<?= htmlspecialchars($message['event_title']); ?>"</h3></p>
+                        <a href="event_page.php?id=<?= urlencode($message['event_id']); ?>" 
+                        style="color: inherit; text-decoration: none;"
+                        class="mark-as-read"
+                        data-message-id="<?= $message['id']; ?>">
+                            <p class ="dispaly-4 lead">
+                                <?= htmlspecialchars($message['heading']); ?> 
+                                <?php if ($message['is_message_read'] == 0): ?>
+                                    <span>🔴</span>
+                                <?php endif; ?>
+                                <h3>"<?= htmlspecialchars($message['event_title']); ?>"</h3>
+                            </p>
                         </a>        
                         
                         <p>Jūs gavote šią žinute dėl prenumeratos: "<?= htmlspecialchars($message['subscription_title']); ?>"</p>
@@ -41,5 +50,6 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
 </div>
+<script src="../assets/js/mark_message_as_read.js"></script>
 </body>
 </html>
