@@ -156,6 +156,40 @@ class Subscription {
         return $stmt->get_result();
     }
 
+    public static function deleteSubscription($dbc, $id){
+        $query = "DELETE FROM VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI WHERE VARTOTOJO_RENGINIO_TIPAS_PASIRINKIMAI.fk_vartotojo_pasirinkimo_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        $query = "DELETE FROM VARTOTOJO_GRUPES_PASIRINKIMAI WHERE VARTOTOJO_GRUPES_PASIRINKIMAI.fk_vartotojo_pasirinkimo_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        $query = "DELETE FROM ZINUTE WHERE ZINUTE.fk_vartotojo_pasirinkimo_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        $query = "DELETE FROM VARTOTOJO_PASIRINKIMAI WHERE VARTOTOJO_PASIRINKIMAI.id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        
+
+        
+        
+        if ($stmt->affected_rows > 0) {
+            error_log("Subscription deletion successful");
+            return true; 
+        } else {
+            error_log("Subscription deletion unsuccessful");
+            return false;
+        }
+    }
+
     public static function userIsInterestedInEvent($dbc, $event, $subscription_id){    
         $result = self::getSubscriptionData($dbc, $subscription_id);
         $row = $result->fetch_assoc();

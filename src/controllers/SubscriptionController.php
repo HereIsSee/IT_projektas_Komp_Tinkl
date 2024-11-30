@@ -21,5 +21,9 @@ class SubscriptionController {
         };
         
     }
+
+    public function deleteSubscription($subscription_id){
+        return Subscription::deleteSubscription($this->dbc, $subscription_id);
+    }
 }
 ?>
