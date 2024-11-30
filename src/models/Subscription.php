@@ -91,8 +91,8 @@ class Subscription {
             vp.id AS subscription_id,
             m.miestas AS city,
             mikr.pavadinimas AS microcity,
-            rt.pavadinimas AS event_type,
-            sg.pavadinimas AS social_group
+            GROUP_CONCAT(DISTINCT rt.pavadinimas) AS event_type,
+            GROUP_CONCAT(DISTINCT sg.pavadinimas) AS social_group
         FROM 
             VARTOTOJO_PASIRINKIMAI vp
         LEFT JOIN 
@@ -177,10 +177,6 @@ class Subscription {
         $stmt->bind_param("i", $id);
         $stmt->execute();
 
-        
-
-        
-        
         if ($stmt->affected_rows > 0) {
             error_log("Subscription deletion successful");
             return true; 
