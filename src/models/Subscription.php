@@ -209,8 +209,8 @@ class Subscription {
         $result = self::getSubscriptionData($dbc, $subscription_id);
         $row = $result->fetch_assoc();
 
-        $event_type_ids = explode(',', $row['event_type_ids']);
-        $social_group_ids = explode(',', $row['social_group_ids']);
+        $event_type_ids = array_filter(explode(',', $row['event_type_ids']));
+        $social_group_ids = array_filter(explode(',', $row['social_group_ids']));
 
         $is_in_the_same_city = false;
         $has_at_least_one_matching_event_type = false;
@@ -219,28 +219,38 @@ class Subscription {
         {
             $is_in_the_same_city = true;
         }
-        foreach($event_type_ids as $event_type_id){
-            if($event_type_id == $event->getEventTypeId()){
-                $has_at_least_one_matching_event_type = true;
-                
-                break;
-            }
-        }
-
-        foreach($social_group_ids as $social_group_id){
-            $matched_social_group_ids = Event::fetchEventSocialGroupsIds($dbc, $event->getId());
-            while ($row = $matched_social_group_ids->fetch_assoc()) {
-                $social_group_id_from_event = $row['id'];
-                if($social_group_id == $social_group_id_from_event){
-                    $has_at_least_one_matching_social_group = true;
-
+        if(!empty($event_type_ids)){
+            foreach($event_type_ids as $event_type_id){
+                if($event_type_id == $event->getEventTypeId()){
+                    $has_at_least_one_matching_event_type = true;
+                    
                     break;
                 }
             }
-            if($has_at_least_one_matching_social_group){
-                break;
-            }
+        } else {
+            $has_at_least_one_matching_event_type = true;
         }
+        
+        if(!empty($social_group_ids)){
+            foreach($social_group_ids as $social_group_id){
+                $matched_social_group_ids = Event::fetchEventSocialGroupsIds($dbc, $event->getId());
+                while ($row = $matched_social_group_ids->fetch_assoc()) {
+                    $social_group_id_from_event = $row['id'];
+                    if($social_group_id == $social_group_id_from_event){
+                        $has_at_least_one_matching_social_group = true;
+    
+                        break;
+                    }
+                }
+                if($has_at_least_one_matching_social_group){
+                    break;
+                }
+            }
+        } else{
+            $has_at_least_one_matching_social_group = true;
+        }
+
+        
         if($is_in_the_same_city && $has_at_least_one_matching_event_type && $has_at_least_one_matching_social_group){
             return true;
         }
