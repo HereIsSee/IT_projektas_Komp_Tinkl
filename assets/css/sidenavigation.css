@@ -5,6 +5,8 @@
   height: 100%;
 }
 
-/* @media screen and (max-width: 767px) {
-  .row.content {height: auto;} 
-} */
+@media screen and (max-width: 767px) {
+  .row.content {height: auto;}
+  .row {margin-top: -20px; }
+  .row h2 {padding-top: 10px;}
+}
