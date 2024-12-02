@@ -4,7 +4,7 @@ require_once '../src/helpers/is_user.php';
 require_once '../src/controllers/SubscriptionController.php';
 require_once '../src/controllers/EventController.php';
 
-if ($_SESSION['role'] !== 'vartotojas') {
+if ($_SESSION['vaidmuo'] !== 'vartotojas') {
     header("Location: dashboard.php");
     exit();
 }

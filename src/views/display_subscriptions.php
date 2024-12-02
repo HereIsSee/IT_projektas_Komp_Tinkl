@@ -1,5 +1,5 @@
 <?php if (empty($event_selections)): ?>
-    <p>Nerasta renginių pasirinkimo.</p>
+    <p>Nerasta prenumeratų.</p>
 <?php else: ?>
     <?php foreach ($event_selections as $selection_id => $selection): ?>
         <div class="event-selection-container">
