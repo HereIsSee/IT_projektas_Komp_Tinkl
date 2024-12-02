@@ -44,6 +44,10 @@ if (session_status() === PHP_SESSION_NONE) {
                         </a>        
                         
                         <p>Jūs gavote šią žinute dėl prenumeratos: "<?= htmlspecialchars($message['subscription_title']); ?>"</p>
+                        <form action="" method="post" onsubmit="return confirm('Ar tikrai norite ištrinti šią prenumerata?');">
+                            <input type="hidden" name="delete_message" value="<?= $message['id'] ?>">
+                            <button type="submit" class="btn btn-danger">Ištrinti žinute</button>
+                        </form>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>

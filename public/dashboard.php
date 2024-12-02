@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $_SESSION['has_unread_messages'] = MessageController::userHasUnreadMessages($dbc, $_SESSION['user_id']);
-error_log("User have unread messages:" . $_SESSION['has_unread_messages']);
+// error_log("User have unread messages:" . $_SESSION['has_unread_messages']);
 
 $controllerDashboard = new DashboardController($dbc);
 $controllerSubscription = new SubscriptionController($dbc);

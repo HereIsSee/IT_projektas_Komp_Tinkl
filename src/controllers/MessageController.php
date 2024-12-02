@@ -24,5 +24,13 @@ class MessageController{
     public static function userHasUnreadMessages($dbc, $user_id){
         return Message::userHasUnreadMessages($dbc, $user_id);
     }
+
+    public static function deleteMessage($dbc, $message_id, $user_id){
+        if(Message::isMessageUsers($dbc, $message_id, $user_id)){
+            return Message::deleteMessage($dbc, $message_id);
+        }
+    }
+
+    
 }
 ?>

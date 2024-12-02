@@ -81,5 +81,34 @@ class Message{
         $stmt->bind_param("i", $message_id);
         $stmt->execute();
     }
+
+    public static function deleteMessage($dbc, $message_id){
+        $query = "DELETE FROM ZINUTE WHERE ZINUTE.id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i", $message_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            return true; 
+        } else {
+            return false;
+        }
+    }
+
+    public static function isMessageUsers($dbc, $message_id, $user_id){
+        $query = "SELECT z.* FROM ZINUTE AS z WHERE z.id = ? AND z.fk_vartotojo_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("ii", $message_id, $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        // error_log("Is message users: " . $stmt->affected_rows);
+        if ($result->num_rows > 0) {
+            // error_log("message is users!");
+            return true; 
+        } else {
+            return false;
+        }
+    }
 }
 ?>
