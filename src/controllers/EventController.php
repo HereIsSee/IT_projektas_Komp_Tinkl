@@ -18,39 +18,39 @@ class EventController {
         return Event::getAllEventsFromDB($this->dbc);
     }
 
-    public function handleCreateEvent() {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $data = [
-                'title' => $_POST['title'],
-                'date' => $_POST['date'],
-                'description' => $_POST['description'],
-                'address' => $_POST['address'],
-                'event_type_id' => $_POST['event_type'],
-                'city_id' => $_POST['city_id'],
-                'microcity_id' => $_POST['microcity_id'],
-                'old_event_id' => $_POST['old_event_id'],
-                'user_id' => $_SESSION['user_id'],
-                'vip_specialization' => $_SESSION['vip_specialization'],
-            ];
-            $event_type_id = Event::verifyEventTypeSelected($data);
-            $event_id = Event::createEvent($this->dbc, $data);
-
-            $event = new Event( $event_id, $data['title'], $data['date'], $data['description'], 
-                $data['address'], null, $event_type_id, $data['user_id'], $data['city_id'], $data['microcity_id']);
-            
-            if (!empty($_POST['social_groups'])) {
-                Event::addSocialGroups($this->dbc, $event_id, $_POST['social_groups']);
-            }
-
-            if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
-                Event::uploadImages($this->dbc, $event_id, $_SESSION['user_id'], $_FILES['images']);
-                // error_log("GOT HERE!!!");
-            }
-            $this->sendMessagesAboutEventToSubscribedUsers($event);
-            return "Renginys sukurtas sėkmingai!";
+    public function handleCreateEvent($post_data): bool {
+        $data = [
+            'title' => $post_data['title'],
+            'date' => $post_data['date'],
+            'description' => $post_data['description'],
+            'address' => $post_data['address'],
+            'event_type_id' => $post_data['event_type'],
+            'city_id' => $post_data['city_id'],
+            'microcity_id' => $post_data['microcity_id'],
+            'old_event_id' => $post_data['old_event_id'],
+            'user_id' => $_SESSION['user_id'],
+            'vip_specialization' => $_SESSION['vip_specialization'],
+        ];
+        
+        if(Event::similarEventExists($this->dbc, $post_data['title'], $post_data['date'])){
+            return false;
         }
 
-        return null;
+        $event_type_id = Event::verifyEventTypeSelected($data);
+        $event_id = Event::createEvent($this->dbc, $data);
+
+        $event = new Event( $event_id, $data['title'], $data['date'], $data['description'], 
+            $data['address'], null, $event_type_id, $data['user_id'], $data['city_id'], $data['microcity_id']);
+        
+        if (!empty($_POST['social_groups'])) {
+            Event::addSocialGroups($this->dbc, $event_id, $post_data['social_groups']);
+        }
+
+        if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+            Event::uploadImages($this->dbc, $event_id, $_SESSION['user_id'], $_FILES['images']);
+        }
+        $this->sendMessagesAboutEventToSubscribedUsers($event);
+        return true;
     }
     public function getFilteredEvents($queryParams) {
         $title = $queryParams['title'] ?? null;

@@ -19,9 +19,12 @@
             
             <div class="col-sm-9 main-content">
                 
-                <?php if (!empty($message)): ?>
-                    <p id="success-message" class="alert alert-success"><?= htmlspecialchars($message) ?></p>
+                <?php if (isset($message)): ?>
+                    <p id="success-message" class="alert <?= $message ? 'alert-success' : 'alert-danger' ?>">
+                        <?= $message ? 'Renginys sukurtas sėkmingai!' : 'Panašus renginys šią dieną jau egzistuoja!' ?>
+                    </p>
                 <?php endif; ?>
+
                 <h2>Sukurti naują renginį</h2>
                 
                 <form action="create_event.php" method="post" class="form" enctype="multipart/form-data">

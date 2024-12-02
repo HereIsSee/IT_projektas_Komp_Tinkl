@@ -276,6 +276,19 @@ class Event {
         return $events;
     }
     
+    public static function similarEventExists($dbc, $event_name, $event_date){
+        $query = "SELECT * FROM RENGINYS AS r WHERE r.pavadinimas = ? AND r.renginio_data = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("ss", $event_name, $event_date);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            return true; 
+        } else {
+            return false;
+        }
+    }
     
     
 

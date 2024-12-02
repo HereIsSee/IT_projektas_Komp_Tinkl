@@ -11,8 +11,10 @@ if ($_SESSION['vaidmuo'] === 'vartotojas') {
     header("Location: dashboard.php");
     exit();
 }
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $message = $controller->handleCreateEvent($_POST);     
+}
 
-$message = $controller->handleCreateEvent();
 $data = $controller->getCreateEventData();
 $old_user_events = $controller->getEventsCreatedByUser($_SESSION['user_id']);
 
