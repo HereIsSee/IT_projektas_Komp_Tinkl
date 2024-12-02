@@ -4,6 +4,11 @@ require_once '../src/helpers/is_user.php';
 require_once '../src/controllers/SubscriptionController.php';
 require_once '../src/controllers/EventController.php';
 
+if ($_SESSION['role'] !== 'vartotojas') {
+    header("Location: dashboard.php");
+    exit();
+}
+
 $controller = new SubscriptionController($dbc);
 $controllerEvent = new EventController($dbc);
 

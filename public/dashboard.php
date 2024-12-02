@@ -2,6 +2,7 @@
 require_once '../config/database_connection.php';
 require_once '../src/controllers/SubscriptionController.php';
 require_once '../src/controllers/MessageController.php';
+require_once '../src/controllers/EventController.php';
 
 session_start();
 if (!isset($_SESSION['user_id'])) {
@@ -10,12 +11,22 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $_SESSION['has_unread_messages'] = MessageController::userHasUnreadMessages($dbc, $_SESSION['user_id']);
-// error_log("User have unread messages:" . $_SESSION['has_unread_messages']);
 
 $controllerSubscription = new SubscriptionController($dbc);
-$event_selections = $controllerSubscription->getFullSubscriptionsByUserId($_SESSION['user_id']);
+$event_selections = [];
 
-// error_log($event_selections);
+$controller = new EventController($dbc);
+$events = [];
+
+if(($_SESSION['vaidmuo'] == 'vartotojas')){
+    $event_selections = $controllerSubscription->getFullSubscriptionsByUserId($_SESSION['user_id']);
+}
+if(($_SESSION['vaidmuo'] == 'admin')){
+    $events = $controller->getAllEvents();
+}
+if(($_SESSION['vaidmuo'] == 'vip')){
+    $events = $controller->getEventsCreatedByUser($_SESSION['user_id']);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_subscription'])) {
     $deletionSuccess = $controllerSubscription->deleteSubscription($_POST['delete_subscription'], $_SESSION['user_id']);

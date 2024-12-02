@@ -7,7 +7,7 @@ require_once '../src/controllers/EventController.php';
 
 $controller = new EventController($dbc);
 
-if ($_SESSION['vaidmuo'] === 'vartotojas') {
+if ($_SESSION['vaidmuo'] !== 'vip') {
     header("Location: dashboard.php");
     exit();
 }

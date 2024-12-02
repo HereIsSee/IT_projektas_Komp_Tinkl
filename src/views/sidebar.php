@@ -15,6 +15,9 @@
         <?php if ($_SESSION['vaidmuo'] === 'vip'): ?>
             <li class="<?= ($activePage === 'create_event') ? 'active' : '' ?>"><a href="create_event.php">Sukurti rengini</a></li>
         <?php endif; ?>
-        <li class="<?= ($activePage === 'subscription') ? 'active' : '' ?>"><a href="create_subscription.php">Sukurti norimų renginių prenumeratą</a></li>
+        <?php if ($_SESSION['vaidmuo'] === 'vartotojas'): ?>
+            <li class="<?= ($activePage === 'subscription') ? 'active' : '' ?>"><a href="create_subscription.php">Sukurti norimų renginių prenumeratą</a></li>
+        <?php endif; ?>
+        
     </ul>
 </div>

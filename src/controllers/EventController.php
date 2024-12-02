@@ -68,7 +68,6 @@ class EventController {
     public function getEventsCreatedByUser($user_id){
         return Event::getEventsCreatedByUser($this->dbc, $user_id);
     }
-
     public function getCreateEventData() {
         return [
             'cities' => DatabaseHelper::fetchAll($this->dbc, 'MIESTAS'),

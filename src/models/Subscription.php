@@ -1,5 +1,4 @@
 <?php
-// include ''
 class Subscription {
 
     private $id;
