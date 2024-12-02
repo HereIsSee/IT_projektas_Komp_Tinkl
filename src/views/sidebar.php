@@ -1,4 +1,4 @@
-<div class="col-sm-3 sidenav">
+<div class="sidenav col-sm-3">
     <h2>Logo</h2>
     <ul class="nav nav-pills nav-stacked">
         <li class="<?= ($activePage === 'dashboard') ? 'active' : '' ?>"><a href="dashboard.php">Dashboard</a></li>
