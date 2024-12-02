@@ -25,7 +25,7 @@ class Calendar {
     public function __toString() {
         $num_days = date('t', strtotime($this->active_year . '-' . $this->active_month . '-' . $this->active_day));
         $num_days_last_month = date('j', strtotime('last day of previous month', strtotime($this->active_year . '-' . $this->active_month . '-01')));
-        $days = [0 => 'Sun', 1 => 'Mon', 2 => 'Tue', 3 => 'Wed', 4 => 'Thu', 5 => 'Fri', 6 => 'Sat'];
+        $days = [0 => 'Sek', 1 => 'Pir', 2 => 'An', 3 => 'Tr', 4 => 'Ket', 5 => 'Pen', 6 => 'Šeš'];
         $first_day_of_week = array_search(date('D', strtotime($this->active_year . '-' . $this->active_month . '-01')), $days);
 
         $html = '<div class="calendar">';
@@ -44,8 +44,12 @@ class Calendar {
             $next_year++;
         }
         $html .= '<div class="header">';
+
+        setlocale(LC_TIME, 'lt_LT.UTF-8', 'lt_LT', 'Lithuanian');
+        $month_year_lithuanian = strftime('%B %Y', strtotime($this->active_year . '-' . $this->active_month . '-01'));
+
         $html .= '<a href="?month=' . $prev_month . '&year=' . $prev_year . '" class="prev">&laquo; Previous</a>';
-        $html .= '<div class="month-year">' . date('F Y', strtotime($this->active_year . '-' . $this->active_month . '-01')) . '</div>';
+        $html .= '<div class="month-year">' . ucfirst($month_year_lithuanian) . '</div>';
         $html .= '<a href="?month=' . $next_month . '&year=' . $next_year . '" class="next">Next &raquo;</a>';
         $html .= '</div>';
         

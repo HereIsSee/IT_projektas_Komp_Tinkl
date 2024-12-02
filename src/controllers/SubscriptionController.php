@@ -46,7 +46,7 @@ class SubscriptionController {
                 return null;
             }
         }
-        error_log("Subscriptions: " . json_encode($subscriptions, JSON_PRETTY_PRINT));
+        // error_log("Subscriptions: " . json_encode($subscriptions, JSON_PRETTY_PRINT));
 
         return $subscriptions;
     }
