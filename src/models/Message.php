@@ -102,9 +102,7 @@ class Message{
         $stmt->execute();
 
         $result = $stmt->get_result();
-        // error_log("Is message users: " . $stmt->affected_rows);
         if ($result->num_rows > 0) {
-            // error_log("message is users!");
             return true; 
         } else {
             return false;

@@ -109,13 +109,17 @@ class Subscription {
             SOCIALINES_GRUPES sg ON vgp.fk_socialines_grupes_id = sg.id
         WHERE 
             vp.fk_vartotojo_id = ?
+        GROUP BY
+            vp.id
         ORDER BY 
             vp.id
         ";
+        
 
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
+        
         return $stmt->get_result();
     }
     
@@ -182,6 +186,21 @@ class Subscription {
             return true; 
         } else {
             error_log("Subscription deletion unsuccessful");
+            return false;
+        }
+    }
+
+    public static function isSubscriptionUsers($dbc, $subscription_id, $user_id){
+        $query = "SELECT * FROM VARTOTOJO_PASIRINKIMAI vp WHERE vp.id = ? AND vp.fk_vartotojo_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("ii", $subscription_id, $user_id);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+
+        if($result->num_rows > 0 ){
+            return true;
+        }else{
             return false;
         }
     }

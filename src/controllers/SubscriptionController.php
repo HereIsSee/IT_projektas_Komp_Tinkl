@@ -22,8 +22,33 @@ class SubscriptionController {
         
     }
 
-    public function deleteSubscription($subscription_id){
-        return Subscription::deleteSubscription($this->dbc, $subscription_id);
+    public function deleteSubscription($subscription_id, $user_id){
+        if(Subscription::isSubscriptionUsers($this->dbc, $subscription_id, $user_id)){
+            return Subscription::deleteSubscription($this->dbc, $subscription_id);
+        }
+    }
+
+    public function getFullSubscriptionsByUserId($user_id) {
+        $result = Subscription::getSubscriptionsByUserId($this->dbc, $user_id);
+        $subscriptions = [];
+        while ($row = $result->fetch_assoc()) {
+            $subscription_id = $row['subscription_id'];
+            if ($subscription_id !== null) {
+                $subscriptions[$subscription_id] = [
+                    'title' => $row['title'],
+                    'city' => $row['city'],
+                    'microcity' => $row['microcity'],
+                    'event_types' => $row['event_type'] ? explode(',', $row['event_type']) : [],
+                    'social_groups' => $row['social_group'] ? explode(',', $row['social_group']) : []
+                ];
+            }
+            if ($subscription_id == null){
+                return null;
+            }
+        }
+        error_log("Subscriptions: " . json_encode($subscriptions, JSON_PRETTY_PRINT));
+
+        return $subscriptions;
     }
 }
 ?>
