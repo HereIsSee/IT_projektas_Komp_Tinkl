@@ -1,3 +1,9 @@
+#logo_container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap:5px;
+}
 .row.content {
   height: auto;
 }
@@ -13,7 +19,11 @@
 
 
 @media screen and (max-width: 767px) {
-  .row.content {height: auto;}
   .row {margin-top: -20px; }
   .row h2 {padding-top: 10px;}
+  .col-sm-3.sidenav {
+    position: static;
+    overflow-y: auto;
+    height: auto
+  }
 }

@@ -24,8 +24,11 @@ $event_types = $data['event_types'];
             
             <div class="col-sm-9 main-content">
 
-            <?php if (!empty($message)): ?>
-                <p id="success-message" class="alert alert-success"><?= htmlspecialchars($message) ?></p>
+
+            <?php if (isset($message)): ?>
+                <p id="success-message" class="alert <?= $message ? 'alert-success' : 'alert-danger' ?>">
+                    <?= $message ? 'Prenumerata sukurta sėkmingai!' : 'Jūs jau turite prenumeratą su tokiu pavadinimu!' ?>
+                </p>
             <?php endif; ?>
 
             <h2>Sukurti naują prenumeratą</h2>

@@ -1,5 +1,8 @@
 <div class="sidenav col-sm-3">
-    <h2>Logo</h2>
+    <div id="logo_container">
+        <img src="../assets/website_images/Logo.png" alt="EventHub" style="height:70px; margin: 10px 0px; border-radius: 25px;">
+        <h2>EventHub</h2>
+    </div>
     <ul class="nav nav-pills nav-stacked">
         <li class="<?= ($activePage === 'dashboard') ? 'active' : '' ?>"><a href="dashboard.php">Dashboard</a></li>
         <li class="<?= ($activePage === 'messages') ? 'active' : '' ?>">

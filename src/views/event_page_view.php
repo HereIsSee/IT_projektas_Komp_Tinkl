@@ -31,13 +31,14 @@
                 <?php endforeach; ?>
             </ul>
 
+            <?php if ($photos): ?>
             <h3>Renginio nuotraukos</h3>
-            <div class="photo-gallery">
-                <?php foreach ($photos as $photo): ?>
-                    <img src="<?= htmlspecialchars($photo) ?>" style="max-width: 300px; height: auto;">
-                <?php endforeach; ?>
-            </div>
-
+                <div class="photo-gallery">
+                    <?php foreach ($photos as $photo): ?>
+                        <img src="<?= htmlspecialchars($photo) ?>" style="max-width: 300px; height: auto;">
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
             <?php if ($previous_event): ?>
                 <h3>Preiti panašūs renginiai</h3>

@@ -47,7 +47,7 @@ class Subscription {
             }
         }
 
-        return "Prenumėrata sukurta sėkmingai!";
+        return true;
     }
 
     public static function updateTableRowPopularity($dbc, $table_name, $table_row_id) {
@@ -157,6 +157,21 @@ class Subscription {
         $stmt->bind_param("i", $subscription_id);
         $stmt->execute();
         return $stmt->get_result();
+    }
+
+    public static function userHasSimilarSubscription($dbc, $subscription_name, $user_id){
+        $query = "SELECT * FROM VARTOTOJO_PASIRINKIMAI as vp WHERE fk_vartotojo_id = ? AND vp.pavadinimas = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("is", $user_id, $subscription_name);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if($result->num_rows > 0 ){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public static function deleteSubscription($dbc, $id){

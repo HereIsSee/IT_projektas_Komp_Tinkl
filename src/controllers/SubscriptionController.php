@@ -17,9 +17,13 @@ class SubscriptionController {
             $event_types = $postData['event_types'] ?? [];
             $social_groups = $postData['social_groups'] ?? [];
 
-            return Subscription::createSubscription($this->dbc, $title, $user_id, $city_id, $microcity_id, $event_types, $social_groups);
-        };
-        
+            if(!Subscription::userHasSimilarSubscription($this->dbc, $title, $_SESSION['user_id'])){
+                return Subscription::createSubscription($this->dbc, $title, $user_id, $city_id, $microcity_id, $event_types, $social_groups);
+            } else {
+                return false;
+            }
+            
+        }
     }
 
     public function deleteSubscription($subscription_id, $user_id){
