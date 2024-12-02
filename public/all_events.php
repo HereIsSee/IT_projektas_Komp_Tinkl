@@ -9,8 +9,8 @@ $data = $controller->getCreateEventData();
 
 
 $events = [];
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $events = $controller->getFilteredEvents($_POST);
+if (!empty($_GET)) {
+    $events = $controller->getFilteredEvents($_GET);
 } else {
     $events = $controller->getAllEvents();
 }

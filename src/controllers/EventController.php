@@ -52,25 +52,18 @@ class EventController {
 
         return null;
     }
-    public function getFilteredEvents($postData) {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            
-            $title = $postData['title'];
-            $date_from = $postData['date_from'];
-            $date_to = $postData['date_to'];
-            $city_id = $postData['city_id'];
-            $microcity_id = $postData['microcity_id'];
-            $event_type = $postData['event_type'];
-            $social_groups = $postData['social_groups'] ?? [];
-
-            return Event::getFilteredEvents($this->dbc, $title, $date_from, $date_to, $city_id, $microcity_id, $event_type, $social_groups);
-
-        }else{
-            return Event::getAllEventsFromDB($this->dbc);
-        }
-
-        return null;
+    public function getFilteredEvents($queryParams) {
+        $title = $queryParams['title'] ?? null;
+        $date_from = $queryParams['date_from'] ?? null;
+        $date_to = $queryParams['date_to'] ?? null;
+        $city_id = $queryParams['city_id'] ?? null;
+        $microcity_id = $queryParams['microcity_id'] ?? null;
+        $event_type = $queryParams['event_type'] ?? null;
+        $social_groups = $queryParams['social_groups'] ?? [];
+    
+        return Event::getFilteredEvents($this->dbc, $title, $date_from, $date_to, $city_id, $microcity_id, $event_type, $social_groups);
     }
+    
 
     public function getEventsCreatedByUser($user_id){
         return Event::getEventsCreatedByUser($this->dbc, $user_id);

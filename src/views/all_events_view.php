@@ -23,7 +23,7 @@
                     <span id="arrow">▼</span> <span>Filtras</span>
                 </div>
                 <div id="form-container" class="hidden">
-                    <form action="all_events.php" method="post">
+                    <form action="all_events.php" method="get">
                         <div class="form-group">
                             <label for="title">Renginio pavadinimas</label>
                             <input type="text" class="form-control" id="title" name="title">
