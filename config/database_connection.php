@@ -2,7 +2,7 @@
 $server = "localhost";
 $user = "root";
 $password = "";
-$db = "renginiu_kalendorius_1";
+$db = "renginiu_kalendorius";
 
 $dbc = mysqli_connect($server, $user, $password, $db);
 if (!$dbc) {
